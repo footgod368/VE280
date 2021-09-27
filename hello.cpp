@@ -1,6 +1,8 @@
-#include <stdio.h>
+#include <iostream>
+using namespace std;
 
-int main() {
-    printf("Hello World!\n");
+int main(){
+    int i=1; //will lead to a warning with g++ -Wall
+    cout << "Hello World!" << endl;
     return 0;
 }
