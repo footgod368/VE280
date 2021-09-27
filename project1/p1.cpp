@@ -59,12 +59,39 @@ void print_result(bool judge)
 
 bool triangle(const int & target)
 {
-    return true;
+    double limit = sqrt(2*target);
+    for (int n=1; n<limit; n++)
+    {
+        if (n*(n+1) == 2*target)
+        return true;
+    }
+    return false;
 }
 
 bool power(const int & target)
 {
+    if (target == 1) 
     return true;
+
+    bool judge = false;
+    int n = 2;
+    while (1)
+    {
+        if (pow(2,n) > target)
+        break;
+
+        for (int m=2; pow(m,n)<=target; m++)
+        {
+            if (pow(m,n) == target)
+            {
+                judge = true;
+                break;
+            }
+        }
+        n++;
+    }
+    
+    return judge;
 }
 
 bool squares(const int & target)
