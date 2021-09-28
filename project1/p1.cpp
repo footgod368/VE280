@@ -3,23 +3,23 @@
 #include <cmath>
 using namespace std;
 
-//print "Pass\n" if ture, "Fail\n" if false
 void print_result(bool judge);
+//print "Pass\n" if ture, "Fail\n" if false
 
-//judge whether target is triangle number
 bool triangle(const int & target);
+//judge whether target is triangle number
 
-//judge whether target is power number
 bool power(const int & target);
+//judge whether target is power number
 
-//judge whether target is sum of consecutive squares
 bool squares(const int & target);
+//judge whether target is sum of consecutive squares
 
-//judge whether target is abundant number
 bool abundant(const int & target);
+//judge whether target is abundant number
 
-//helper function used in squares()
 int square_sum(const int & m, const int & i);
+//helper function used in squares()
 
 int main()
 {   
@@ -50,6 +50,8 @@ int main()
     }
     return 0;
 }
+
+//implemention of functions:
 
 void print_result(bool judge)
 {
