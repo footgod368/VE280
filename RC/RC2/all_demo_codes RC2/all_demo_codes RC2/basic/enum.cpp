@@ -1,7 +1,7 @@
 #include<iostream>
 using namespace std;
 
-enum color{r, g = 30, b} c;
+enum color{r=1, g=3, b} c;
 int main()
 {
 
