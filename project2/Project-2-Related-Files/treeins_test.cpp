@@ -34,7 +34,7 @@ int main()
                          tree_make(3, tree_make(), tree_make()),
                          tree_make()));
 
-    tree_t candidate = insert_tree(3, start);
+    /*tree_t candidate = insert_tree(3, start);
     tree_print(end);
     cout << endl;
     cout << endl;
@@ -51,6 +51,11 @@ int main()
     {
         cout << "Failed\n";
         return -1;
-    }
+    }*/
+
+    tree_print(start);
+    cout << endl;
+    tree_print(end);
+    cout << endl;
 
 }
