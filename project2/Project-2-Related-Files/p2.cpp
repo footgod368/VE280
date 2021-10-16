@@ -132,12 +132,9 @@ list_t insert_list(list_t first, list_t second, unsigned int n)
 
 //binary tree
 
-list_t traversal(tree_t tree)
-{
-    return inOrderTraversal(list_make(), tree);
-}
-
 static list_t inOrderTraversal(list_t list, tree_t tree)
+//in order traversal of a tree
+//EFFECTS: store every node of tree into list in order
 {
     if (tree_isEmpty(tree)) return list;
     list=inOrderTraversal(list,tree_left(tree));
@@ -146,11 +143,87 @@ static list_t inOrderTraversal(list_t list, tree_t tree)
     return list;
 }
 
+list_t traversal(tree_t tree)
+{
+    return inOrderTraversal(list_make(), tree);
+}
+
+int tree_sum(tree_t tree)
+{
+    return sum(traversal(tree));
+}
+
+bool tree_search(tree_t tree, int key)
+{
+    if (tree_isEmpty(tree)) return false;
+    if (tree_elt(tree)==key) return true;
+    return tree_search(tree_left(tree),key)||tree_search(tree_right(tree),key);
+}
+
+static int maximum(int a, int b)
+{
+    return a>b?a:b;
+}
+
+int depth(tree_t tree)
+{
+    if (tree_isEmpty(tree)) return 0;
+    return 1+maximum(depth(tree_left(tree)),depth(tree_right(tree)));
+}
+
+static int minimum(int a, int b)
+{
+    return a<b?a:b;
+}
+
+static int list_min(int elt, list_t list)
+//REQUIERS: list is not empty
+//EFFECTS: return the smallest element of list
+{
+    if (list_isEmpty(list)) return elt;
+    return list_min(minimum(elt,list_first(list)),list_rest(list));
+}
+
+int tree_min(tree_t tree)
+{
+    list_t list = traversal(tree);
+    return list_min(list_first(list), list);
+}
+
+static bool my_tree_hasPathSum(tree_t tree, int sum)
+//EFFECTS: identical with tree_hasPathSum except that it considers the path sum of an empty tree is zero
+{
+    if (tree_isEmpty(tree)) return sum==0;
+    return my_tree_hasPathSum(tree_left(tree), sum-tree_elt(tree)) || my_tree_hasPathSum(tree_right(tree),sum-tree_elt(tree));
+}
+
+bool tree_hasPathSum(tree_t tree, int sum)
+{
+    if (tree_isEmpty(tree)) return false;
+    return my_tree_hasPathSum(tree,sum);
+}
+
+bool covered_by(tree_t A, tree_t B)
+{
+    if (tree_isEmpty(A)) return true;
+    if (tree_isEmpty(B)) return false;
+    return tree_elt(A)==tree_elt(B) && covered_by(tree_left(A),tree_left(B)) && covered_by(tree_right(A),tree_right(B));
+}
 
 
+bool contained_by(tree_t A, tree_t B)
+{
+    if (covered_by(A,B)) return true;
+    if (tree_isEmpty(B)) return false;
+    return contained_by(A,tree_left(B)) || contained_by(A,tree_right(B));
+}
 
-
-
+tree_t insert_tree(int elt, tree_t tree)
+{
+    if (tree_isEmpty(tree)) return tree_make(elt,tree_make(),tree_make());
+    if (elt < tree_elt(tree)) return tree_make(tree_elt(tree), insert_tree(elt,tree_left(tree)), tree_right(tree));
+    return tree_make(tree_elt(tree), tree_left(tree), insert_tree(elt, tree_right(tree)));
+}
 
 // below is for testing
 /*static int add(int a, int b)

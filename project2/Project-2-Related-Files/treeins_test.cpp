@@ -23,6 +23,7 @@ static bool tree_equal(tree_t t1, tree_t t2)
     }
 }
 
+
 int main()
 {
     tree_t start = tree_make(2,
@@ -34,7 +35,23 @@ int main()
                          tree_make(3, tree_make(), tree_make()),
                          tree_make()));
 
-    /*tree_t candidate = insert_tree(3, start);
+    tree_print(start);
+    cout << endl;
+    tree_print(end);
+    cout << endl;
+    list_print(traversal(end));
+    cout << endl;
+    cout << tree_search(end,4) << endl;
+    cout << depth(start) << endl;
+    cout << tree_min(end) << endl;
+    cout << tree_hasPathSum(end,9) << endl;
+    cout << covered_by(start,end) << endl;
+    cout << covered_by(end,start) << endl;
+    cout << contained_by(tree_left(start),end) << endl;
+    cout << contained_by(tree_right(end),start) << endl;
+    cout << contained_by(tree_left(end),start) << endl;
+    
+    tree_t candidate = insert_tree(3, start);
     tree_print(end);
     cout << endl;
     cout << endl;
@@ -51,11 +68,5 @@ int main()
     {
         cout << "Failed\n";
         return -1;
-    }*/
-
-    tree_print(start);
-    cout << endl;
-    tree_print(end);
-    cout << endl;
-
+    }
 }
