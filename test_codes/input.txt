@@ -1,0 +1,2 @@
+19 this string
+42abc
