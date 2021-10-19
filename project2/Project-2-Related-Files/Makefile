@@ -1,16 +1,16 @@
-all: test
+all: myTest
 
-test: p2.o recursive.o treeins_test.o
-	g++ -o test p2.o recursive.o treeins_test.o -Wall
+myTest: p2.o recursive.o myTest.o
+	g++ -o myTest p2.o recursive.o myTest.o
+
+myTest.o: myTest.cpp
+	# g++ -c myTest.cpp
 
 p2.o: p2.cpp
-	g++ -c p2.cpp -Wall
+	g++ -c p2.cpp
 
 recursive.o: recursive.cpp
-	g++ -c recursive.cpp -Wall
-
-treeins_test.p: treeins_test.cpp
-	g++ -c treeins_test.cpp -Wall
+	g++ -c recursive.cpp
 
 clean:
-	rm -f test *.o
+	rm -f myTest *.o

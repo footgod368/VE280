@@ -133,8 +133,8 @@ list_t insert_list(list_t first, list_t second, unsigned int n)
 //binary tree
 
 static list_t inOrderTraversal(list_t list, tree_t tree)
-//in order traversal of a tree
-//EFFECTS: store every node of tree into list in order
+//reverse in order traversal of a tree
+//EFFECTS: store every node of tree into list in order, but still need reversed
 {
     if (tree_isEmpty(tree)) return list;
     list=inOrderTraversal(list,tree_left(tree));
@@ -145,7 +145,7 @@ static list_t inOrderTraversal(list_t list, tree_t tree)
 
 list_t traversal(tree_t tree)
 {
-    return inOrderTraversal(list_make(), tree);
+    return reverse(inOrderTraversal(list_make(), tree));
 }
 
 int tree_sum(tree_t tree)
@@ -193,8 +193,15 @@ int tree_min(tree_t tree)
 static bool my_tree_hasPathSum(tree_t tree, int sum)
 //EFFECTS: identical with tree_hasPathSum except that it considers the path sum of an empty tree is zero
 {
-    if (tree_isEmpty(tree)) return sum==0;
-    return my_tree_hasPathSum(tree_left(tree), sum-tree_elt(tree)) || my_tree_hasPathSum(tree_right(tree),sum-tree_elt(tree));
+    tree_t left = tree_left(tree);
+    tree_t right = tree_right(tree);
+    bool hasLeft = !tree_isEmpty(left);
+    bool hasRight = !tree_isEmpty(right);
+    int elt = tree_elt(tree);
+    if (!hasLeft && !hasRight) return sum==elt;
+    else if (!hasLeft && hasRight) return my_tree_hasPathSum(right, sum-elt);
+    else if (hasLeft && !hasRight) return my_tree_hasPathSum(left,sum-elt);
+    else return my_tree_hasPathSum(left, sum-elt) || my_tree_hasPathSum(right, sum-elt);
 }
 
 bool tree_hasPathSum(tree_t tree, int sum)
@@ -224,43 +231,3 @@ tree_t insert_tree(int elt, tree_t tree)
     if (elt < tree_elt(tree)) return tree_make(tree_elt(tree), insert_tree(elt,tree_left(tree)), tree_right(tree));
     return tree_make(tree_elt(tree), tree_left(tree), insert_tree(elt, tree_right(tree)));
 }
-
-// below is for testing
-/*static int add(int a, int b)
-{
-    return a+b;
-}
-
-int main()
-{
-    list_t L0 = list_make();
-    list_t L1 = list_make(1,L0);
-    list_t L2 = list_make(2,L1);
-    list_t L3 = list_make(3,L2);
-    list_t L4 = list_make(4,L3);
-    list_print(L4);
-    cout << endl;
-    cout << size(L4) << endl;
-    cout << sum(L4) << endl;
-    cout << product(L4) << endl;
-    cout << accumulate(L4,add,0) << endl;
-    list_print(reverse(L4));
-    cout << endl;
-    list_print(append(L4,L3));
-    cout << endl;
-    list_print(filter(L4,isEven));
-    cout << endl;
-    list_print(filter_even(L4));
-    cout << endl;
-    list_print(filter_odd(L4));
-    cout << endl;
-    list_print(head(L4,2));
-    cout << endl;
-    list_print(tail(L4,2));
-    cout << endl;
-   list_print(chop(L4,2));
-    cout << endl;
-   list_print(insert_list(L4,L3,2));
-    cout << endl;
-    return 0;
-}*/
