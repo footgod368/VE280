@@ -138,6 +138,7 @@ int main()
                    tree_make(4, 
                          tree_make(3, tree_make(), tree_make()),
                          tree_make()));
+    
 
     assert(tree_sum(A) == 7);
     assert(tree_sum(B) == 10);
