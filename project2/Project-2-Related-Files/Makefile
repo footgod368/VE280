@@ -4,7 +4,7 @@ myTest: p2.o recursive.o myTest.o
 	g++ -o myTest p2.o recursive.o myTest.o
 
 myTest.o: myTest.cpp
-	# g++ -c myTest.cpp
+	g++ -c myTest.cpp
 
 p2.o: p2.cpp
 	g++ -c p2.cpp
