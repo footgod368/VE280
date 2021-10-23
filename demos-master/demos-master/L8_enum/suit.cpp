@@ -1,11 +1,19 @@
-#include <iostream>
-using namespace std;
+#include <iostream>using namespace std;
 
-enum Suit_t {CLUBS, DIAMONDS, HEARTS, SPADES};
+enum Suit_t
+{
+    CLUBS,
+    DIAMONDS,
+    HEARTS,
+    SPADES
+}
 
-bool isRed(Suit_t s) {
+;
+
+bool isRed(Suit_t s)
+{
     // switch (s) {
-    //     case DIAMONDS: 
+    //     case DIAMONDS:
     //     case HEARTS:
     //         return true;
     //         break;
@@ -17,13 +25,15 @@ bool isRed(Suit_t s) {
     //         assert(0);
     //         break;
     // }
-    return s==1 || s==2; //整数值可用来判断，但不能用来赋值
+    return s == 1 || s == 2; //整数值可用来判断，但不能用来赋值
 }
 
-int main(){
+int main()
+{
     Suit_t suit = DIAMONDS;
 
-    if (isRed(suit)){
+    if (isRed(suit))
+    {
         cout << "red" << endl;
     }
 
@@ -33,4 +43,3 @@ int main(){
 
     return 0;
 }
-

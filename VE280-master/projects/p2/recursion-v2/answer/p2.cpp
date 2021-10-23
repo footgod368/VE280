@@ -8,10 +8,10 @@
 #define MIN_INT (1 << (8 * sizeof(int) - 1))
 #endif
 #ifndef max
-#define max(a,b) (((a) > (b)) ? (a) : (b))
+#define max(a, b) (((a) > (b)) ? (a) : (b))
 #endif
 #ifndef min
-#define min(a,b) (((a) < (b)) ? (a) : (b))
+#define min(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
 int size(list_t list)
@@ -46,25 +46,24 @@ list_t append(list_t first, list_t second)
 
 bool isArithmeticSequence(list_t v)
 {
-    return (list_isEmpty(v) || list_isEmpty(list_rest(v)) || list_isEmpty(list_rest(list_rest(v)))) ? true :
-           (list_first(v) + list_first(list_rest(list_rest(v))) == 2 * list_first(list_rest(v)) && isArithmeticSequence(list_rest(v)));
+    return (list_isEmpty(v) || list_isEmpty(list_rest(v)) || list_isEmpty(list_rest(list_rest(v)))) ? true : (list_first(v) + list_first(list_rest(list_rest(v))) == 2 * list_first(list_rest(v)) && isArithmeticSequence(list_rest(v)));
 }
 
 list_t filter_odd(list_t list)
 {
-    return filter(list, [](int a)->bool {return a % 2 != 0;});
+    return filter(list, [](int a) -> bool
+                  { return a % 2 != 0; });
 }
 
-list_t filter(list_t list, bool(*fn)(int))
+list_t filter(list_t list, bool (*fn)(int))
 {
-    return list_isEmpty(list) ? list_make() : fn(list_first(list)) ? list_make(list_first(list), filter(list_rest(list), fn)) : filter(list_rest(list), fn);
+    return list_isEmpty(list) ? list_make() : fn(list_first(list)) ? list_make(list_first(list), filter(list_rest(list), fn))
+                                                                   : filter(list_rest(list), fn);
 }
 
 static list_t unique_helper(list_t old, list_t list)
 {
-    return list_isEmpty(old) ? list :
-           (memberOf(list, list_first(old)) ? unique_helper(list_rest(old), list) :
-           unique_helper(list_rest(old), list_make(list_first(old), list)));
+    return list_isEmpty(old) ? list : (memberOf(list, list_first(old)) ? unique_helper(list_rest(old), list) : unique_helper(list_rest(old), list_make(list_first(old), list)));
 }
 
 list_t unique(list_t list)
@@ -107,7 +106,7 @@ list_t traversal(tree_t tree)
     return tree_isEmpty(tree) ? list_make() : append(traversal(tree_left(tree)), list_make(tree_elt(tree), traversal(tree_right(tree))));
 }
 
-static bool tree_hasMonotonicPath_helper(tree_t tree, bool(*fn)(int, int))
+static bool tree_hasMonotonicPath_helper(tree_t tree, bool (*fn)(int, int))
 {
     return (!tree_isEmpty(tree_left(tree)) ? (fn(tree_elt(tree), tree_elt(tree_left(tree))) && tree_hasMonotonicPath_helper(tree_left(tree), fn)) : true) ||
            (!tree_isEmpty(tree_right(tree)) ? (fn(tree_elt(tree), tree_elt(tree_right(tree))) && tree_hasMonotonicPath_helper(tree_right(tree), fn)) : true);
@@ -116,22 +115,23 @@ static bool tree_hasMonotonicPath_helper(tree_t tree, bool(*fn)(int, int))
 bool tree_hasMonotonicPath(tree_t tree)
 {
     return !tree_isEmpty(tree) &&
-            (tree_hasMonotonicPath_helper(tree, [](int a, int b)->bool {return a<=b;}) ||
-            tree_hasMonotonicPath_helper(tree, [](int a, int b)->bool {return a>=b;}));
+           (tree_hasMonotonicPath_helper(tree, [](int a, int b) -> bool
+                                         { return a <= b; }) ||
+            tree_hasMonotonicPath_helper(tree, [](int a, int b) -> bool
+                                         { return a >= b; }));
 }
 
 bool tree_allPathSumGreater(tree_t tree, int sum)
 {
     return tree_isEmpty(tree) ||
            ((!tree_isEmpty(tree_left(tree)) && tree_allPathSumGreater(tree_left(tree), sum - tree_elt(tree))) &&
-           (!tree_isEmpty(tree_right(tree)) && tree_allPathSumGreater(tree_right(tree), sum - tree_elt(tree))) ||
-           (tree_isEmpty(tree_left(tree)) && tree_isEmpty(tree_right(tree)) && sum > tree_elt(tree)));
+                (!tree_isEmpty(tree_right(tree)) && tree_allPathSumGreater(tree_right(tree), sum - tree_elt(tree))) ||
+            (tree_isEmpty(tree_left(tree)) && tree_isEmpty(tree_right(tree)) && sum > tree_elt(tree)));
 }
 
 bool covered_by(tree_t A, tree_t B)
 {
-    return tree_isEmpty(A) ? true : (tree_isEmpty(B) ? false :
-           (tree_elt(A) == tree_elt(B) && covered_by(tree_left(A), tree_left(B)) && covered_by(tree_right(A), tree_right(B))));
+    return tree_isEmpty(A) ? true : (tree_isEmpty(B) ? false : (tree_elt(A) == tree_elt(B) && covered_by(tree_left(A), tree_left(B)) && covered_by(tree_right(A), tree_right(B))));
 }
 
 bool contained_by(tree_t A, tree_t B)
@@ -141,5 +141,5 @@ bool contained_by(tree_t A, tree_t B)
 
 tree_t insert_tree(int elt, tree_t tree)
 {
-    return tree_isEmpty(tree) ? tree_make(elt, tree_make(), tree_make()) :tree_make(tree_elt(tree), elt < tree_elt(tree) ? insert_tree(elt, tree_left(tree)) : tree_left(tree), elt < tree_elt(tree) ? tree_right(tree) : insert_tree(elt, tree_right(tree)));
+    return tree_isEmpty(tree) ? tree_make(elt, tree_make(), tree_make()) : tree_make(tree_elt(tree), elt < tree_elt(tree) ? insert_tree(elt, tree_left(tree)) : tree_left(tree), elt < tree_elt(tree) ? tree_right(tree) : insert_tree(elt, tree_right(tree)));
 }
