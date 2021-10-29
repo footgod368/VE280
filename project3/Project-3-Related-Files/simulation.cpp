@@ -184,3 +184,23 @@ creature_t *getCreatureInSquare(int i, int j, world_t &world)
     }
     return NULL;
 }
+
+void viewGrid(const world_t &world)
+{
+    for (int i = 0; i < world.grid.width; i++)
+    {
+        for (int j = 0; j < world.grid.height; j++)
+        {
+            if (world.grid.squares[i][j] == NULL)
+                cout << "____ ";
+            else
+            {
+                creature_t creature = *world.grid.squares[i][j];
+                string name = creature.species->name.substr(0, 2);
+                string direction = directShortName[creature.direction];
+                cout << (name + "_" + direction + " ");
+            }
+        }
+        cout << endl;
+    }
+}

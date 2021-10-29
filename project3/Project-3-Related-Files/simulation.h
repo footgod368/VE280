@@ -33,4 +33,6 @@ void updateGrid(world_t &world);
 
 creature_t *getCreatureInSquare(int i, int j, world_t &world);
 
+void viewGrid(const world_t &world);
+
 #endif
