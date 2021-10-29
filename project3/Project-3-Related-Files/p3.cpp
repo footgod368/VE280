@@ -16,15 +16,9 @@ int main(int argc, char *argv[])
     if (verboseSpecifier == "v" || verboseSpecifier == "verbose")
         outputMode = Verbose;
 
-    int speciesNum = 0;
-    string pathOfSpecies;
-    string speciesInfo[MAXSPECIES];
-    readSpeciesSummary(speciesSummary, pathOfSpecies, speciesInfo, speciesNum);
+    world_t world = initWorld(speciesSummary, worldFile);
 
-    int creaturesNum = 0;
-    int gridWidth = 0, gridHeight = 0;
-    string creaturesInfo[MAXCREATURES];
-    readWorldFile(worldFile, gridWidth, gridHeight, creaturesInfo, creaturesNum);
-
+    cout << world.numCreatures << endl
+         << world.numSpecies << endl;
     return 0;
 }

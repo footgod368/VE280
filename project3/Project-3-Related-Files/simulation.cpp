@@ -35,3 +35,22 @@ void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, str
     }
     fin.close();
 }
+
+world_t initWorld(const string &speciesSummary, const string &worldFile)
+{
+    world_t world;
+
+    int speciesNum = 0;
+    string pathOfSpecies;
+    string speciesInfo[MAXSPECIES];
+    readSpeciesSummary(speciesSummary, pathOfSpecies, speciesInfo, speciesNum);
+
+    int creaturesNum = 0;
+    int gridWidth = 0, gridHeight = 0;
+    string creaturesInfo[MAXCREATURES];
+    readWorldFile(worldFile, gridWidth, gridHeight, creaturesInfo, creaturesNum);
+
+    world.numSpecies = speciesNum;
+    world.numCreatures = creaturesNum;
+    return world;
+}
