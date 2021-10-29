@@ -18,5 +18,7 @@ int main(int argc, char *argv[])
 
     world_t world = initWorld(speciesSummary, worldFile);
 
+    cout << world.grid.squares[2][2]->species->name << endl;
+
     return 0;
 }

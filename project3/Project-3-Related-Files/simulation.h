@@ -29,4 +29,8 @@ direction_t encodeDirName(string dirName);
 
 void setSpecie(const string &specieName, creature_t &newCreature, world_t &world);
 
+void updateGrid(world_t &world);
+
+creature_t *getCreatureInSquare(int i, int j, world_t &world);
+
 #endif

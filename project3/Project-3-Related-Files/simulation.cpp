@@ -53,6 +53,11 @@ world_t initWorld(const string &speciesSummary, const string &worldFile)
 
     initSpecies(speciesNum, speciesInfo, pathOfSpecies, world);
     initCreatures(creaturesNum, creaturesInfo, world);
+
+    world.grid.width = gridWidth;
+    world.grid.height = gridHeight;
+    updateGrid(world);
+
     return world;
 }
 
@@ -157,4 +162,25 @@ void setSpecie(const string &specieName, creature_t &newCreature, world_t &world
         if (specieName == world.species[i].name)
             newCreature.species = &world.species[i];
     }
+}
+
+void updateGrid(world_t &world)
+{
+    for (int i = 0; i < world.grid.width; i++)
+    {
+        for (int j = 0; j < world.grid.height; j++)
+        {
+            world.grid.squares[i][j] = getCreatureInSquare(i, j, world);
+        }
+    }
+}
+
+creature_t *getCreatureInSquare(int i, int j, world_t &world)
+{
+    for (int k = 0; k < world.numCreatures; k++)
+    {
+        if (world.creatures[k].location.r == i && world.creatures[k].location.c == j)
+            return &world.creatures[k];
+    }
+    return NULL;
 }
