@@ -6,7 +6,7 @@ DEFS =
 LIBS =
 INCLUDES = #-I.
 HEADERS =
-MAINSRCS = main.cpp
+MAINSRCS = test.cpp
 OTHSRCS = IntSet.cpp
 SRCS = $(MAINSRCS) $(OTHSRCS)
 OBJS = $(SRCS:.cpp=.o)

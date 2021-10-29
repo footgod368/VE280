@@ -31,8 +31,8 @@ struct Entity
 };
 
 // 派生类
-class Rectangle : public Shape,
-                  public Entity
+struct Rectangle : public Shape,
+                   public Entity
 {
 public:
     int getArea()
