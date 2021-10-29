@@ -52,7 +52,7 @@ world_t initWorld(const string &speciesSummary, const string &worldFile)
     readWorldFile(worldFile, gridWidth, gridHeight, creaturesInfo, creaturesNum);
 
     initSpecies(speciesNum, speciesInfo, pathOfSpecies, world);
-
+    initCreatures(creaturesNum, creaturesInfo, world);
     return world;
 }
 
@@ -90,7 +90,7 @@ instruction_t getInstruction(string &line)
     iss.str(line);
     string nameOfOpcode;
     iss >> nameOfOpcode;
-    newInstruction.op = encode(nameOfOpcode);
+    newInstruction.op = encodeOpName(nameOfOpcode);
     newInstruction.address = 0;
     if (isWithAddress(newInstruction.op))
     {
@@ -101,7 +101,7 @@ instruction_t getInstruction(string &line)
     return newInstruction;
 }
 
-opcode_t encode(string nameOfOpcode)
+opcode_t encodeOpName(string nameOfOpcode)
 {
     for (int i = 0; i <= 8; i++)
     {
@@ -115,4 +115,46 @@ opcode_t encode(string nameOfOpcode)
 bool isWithAddress(opcode_t opcode)
 {
     return (opcode > 3);
+}
+
+void initCreatures(const int &creaturesNum, string creaturesInfo[], world_t &world)
+{
+    world.numCreatures = creaturesNum;
+
+    for (int i = 0; i < creaturesNum; i++)
+    {
+        creature_t newCreature;
+
+        newCreature.programID = 0;
+        string specieName;
+        string dirName;
+        string line = creaturesInfo[i];
+        istringstream iss;
+        iss.str(line);
+        iss >> specieName >> dirName >> newCreature.location.r >> newCreature.location.c;
+        newCreature.direction = encodeDirName(dirName);
+        setSpecie(specieName, newCreature, world);
+
+        world.creatures[i] = newCreature;
+    }
+}
+
+direction_t encodeDirName(string dirName)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (directName[i] == dirName)
+            return (direction_t)i;
+    }
+    throw dirName;
+    return (direction_t)0;
+}
+
+void setSpecie(const string &specieName, creature_t &newCreature, world_t &world)
+{
+    for (int i = 0; i < world.numSpecies; i++)
+    {
+        if (specieName == world.species[i].name)
+            newCreature.species = &world.species[i];
+    }
 }

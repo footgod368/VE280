@@ -19,8 +19,14 @@ void initSpecies(const int &speciesNum, string speciesInfo[], const string &path
 
 instruction_t getInstruction(string &line);
 
-opcode_t encode(string nameOfOpcode);
+opcode_t encodeOpName(string nameOfOpcode);
 
 bool isWithAddress(opcode_t opcode);
+
+void initCreatures(const int &creaturesNum, string creaturesInfo[], world_t &world);
+
+direction_t encodeDirName(string dirName);
+
+void setSpecie(const string &specieName, creature_t &newCreature, world_t &world);
 
 #endif

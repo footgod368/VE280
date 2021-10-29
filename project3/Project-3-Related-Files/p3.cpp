@@ -18,5 +18,5 @@ int main(int argc, char *argv[])
 
     world_t world = initWorld(speciesSummary, worldFile);
 
-        return 0;
+    return 0;
 }
