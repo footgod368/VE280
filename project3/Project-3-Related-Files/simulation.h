@@ -15,4 +15,12 @@ void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, str
 
 world_t initWorld(const string &speciesSummary, const string &worldFile);
 
+void initSpecies(const int &speciesNum, string speciesInfo[], const string &pathOfSpecies, world_t &world);
+
+instruction_t getInstruction(string &line);
+
+opcode_t encode(string nameOfOpcode);
+
+bool isWithAddress(opcode_t opcode);
+
 #endif

@@ -18,7 +18,5 @@ int main(int argc, char *argv[])
 
     world_t world = initWorld(speciesSummary, worldFile);
 
-    cout << world.numCreatures << endl
-         << world.numSpecies << endl;
-    return 0;
+        return 0;
 }
