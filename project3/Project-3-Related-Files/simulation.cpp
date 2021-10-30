@@ -264,7 +264,7 @@ void doHop(const int &i, world_t &world, OutputMode outputMode)
         cout << "hop" << endl;
     else
         cout << "Instruction " << (activeCreature.programID + 1) << ": hop" << endl;
-    while (cout << isLegalHop(activeCreature, world.grid) << endl, isLegalHop(activeCreature, world.grid))
+    while (isLegalHop(activeCreature, world.grid))
     {
         activeCreature.location = sqaureFaced(activeCreature.location, activeCreature.direction);
         updateGrid(world);
@@ -334,6 +334,22 @@ void doRight(const int &i, world_t &world, OutputMode outputMode)
 }
 void doInfect(const int &i, world_t &world, OutputMode outputMode)
 {
+    creature_t &activeCreature = world.creatures[i];
+    instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
+    if (outputMode == Concise)
+        cout << "infect" << endl;
+    else
+        cout << "Instruction " << (activeCreature.programID + 1) << ": infect" << endl;
+    point_t facedSquare = sqaureFaced(activeCreature.location, activeCreature.direction);
+    if (isFacingEnemy(activeCreature, world.grid))
+    {
+        creature_t *ptFacedCreature = getCreatureInSquare(facedSquare.r, facedSquare.c, world);
+        ptFacedCreature->species = activeCreature.species;
+        ptFacedCreature->programID = 0;
+    }
+    activeCreature.programID += 1;
+    updateGrid(world);
+    viewGrid(world);
 }
 void doIfEmpty(const int &i, world_t &world, OutputMode outputMode)
 {
