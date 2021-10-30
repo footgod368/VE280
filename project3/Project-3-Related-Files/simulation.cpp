@@ -89,7 +89,7 @@ void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, str
         }
         catch (int creaturesNum)
         {
-            cout << "Too many creatures!" << endl
+            cout << "Error: Too many creatures!" << endl
                  << "Maximal number of creatures is " << MAXCREATURES << "." << endl;
             throw creaturesNum;
         }
@@ -165,7 +165,7 @@ void initSpecies(const int &speciesNum, string speciesInfo[], const string &path
             }
             catch (string specieName)
             {
-                cout << "Too many instructions for species " << specieName << "!" << endl
+                cout << "Error: Too many instructions for species " << specieName << "!" << endl
                      << "Maximal number of instructions is " << MAXPROGRAM << "." << endl;
                 throw specieName;
             }
@@ -241,7 +241,7 @@ void initCreatures(const int &creaturesNum, string creaturesInfo[], world_t &wor
         catch (creature_t newCreature)
         {
             cout << "Error: Creature (" << line << ") is out of bound!" << endl
-                 << "The grid size is " << world.grid.height << "-by-" << world.grid.width << endl;
+                 << "The grid size is " << world.grid.height << "-by-" << world.grid.width << "." << endl;
             throw newCreature.location;
         }
 
@@ -289,7 +289,7 @@ void setSpecie(const string &specieName, creature_t &newCreature, world_t &world
     }
     catch (string UnknownSpeciesName)
     {
-        cout << "Species " << UnknownSpeciesName << " not found!" << endl;
+        cout << "Error: Species " << UnknownSpeciesName << " not found!" << endl;
         throw UnknownSpeciesName;
     }
 }
