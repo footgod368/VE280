@@ -1,4 +1,4 @@
-right 3
+hop 3
 ifsame 1
 left
 go 1

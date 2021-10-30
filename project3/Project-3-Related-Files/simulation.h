@@ -52,5 +52,6 @@ bool isSquareInBoundary(const point_t &square, const grid_t &grid);
 bool isSquareEmpty(const point_t &square, const grid_t &grid);
 bool isFacingEnemy(const creature_t &activeCreature, const grid_t &grid);
 bool isFacingSame(const creature_t &activeCreature, const grid_t &grid);
+bool isLegalHop(const creature_t &activeCreature, const grid_t &grid);
 
 #endif

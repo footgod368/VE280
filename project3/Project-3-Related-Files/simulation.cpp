@@ -27,9 +27,9 @@ void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, str
     fin.open(worldFile);
     string line;
     getline(fin, line);
-    gridWidth = stoi(line);
-    getline(fin, line);
     gridHeight = stoi(line);
+    getline(fin, line);
+    gridWidth = stoi(line);
     while (getline(fin, line))
     {
         creaturesInfo[creaturesNum++] = line;
@@ -166,9 +166,9 @@ void setSpecie(const string &specieName, creature_t &newCreature, world_t &world
 
 void updateGrid(world_t &world)
 {
-    for (int i = 0; i < world.grid.width; i++)
+    for (int i = 0; i < world.grid.height; i++)
     {
-        for (int j = 0; j < world.grid.height; j++)
+        for (int j = 0; j < world.grid.width; j++)
         {
             world.grid.squares[i][j] = getCreatureInSquare(i, j, world);
         }
@@ -187,9 +187,9 @@ creature_t *getCreatureInSquare(int i, int j, world_t &world)
 
 void viewGrid(const world_t &world)
 {
-    for (int i = 0; i < world.grid.width; i++)
+    for (int i = 0; i < world.grid.height; i++)
     {
-        for (int j = 0; j < world.grid.height; j++)
+        for (int j = 0; j < world.grid.width; j++)
         {
             if (world.grid.squares[i][j] == NULL)
                 cout << "____ ";
@@ -258,6 +258,19 @@ void oneTakeAction(int i, world_t &world, OutputMode outputMode)
 
 void doHop(const int &i, world_t &world, OutputMode outputMode)
 {
+    creature_t &activeCreature = world.creatures[i];
+    instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
+    if (outputMode == Concise)
+        cout << "hop" << endl;
+    else
+        cout << "Instruction " << (activeCreature.programID + 1) << ": hop" << endl;
+    while (cout << isLegalHop(activeCreature, world.grid) << endl, isLegalHop(activeCreature, world.grid))
+    {
+        activeCreature.location = sqaureFaced(activeCreature.location, activeCreature.direction);
+        updateGrid(world);
+    }
+    activeCreature.programID += 1;
+    viewGrid(world);
 }
 void doLeft(const int &i, world_t &world, OutputMode outputMode)
 {
@@ -449,6 +462,15 @@ bool isFacingSame(const creature_t &activeCreature, const grid_t &grid)
         else
             return false;
     }
+    else
+        return false;
+}
+
+bool isLegalHop(const creature_t &activeCreature, const grid_t &grid)
+{
+    point_t facedSquare = sqaureFaced(activeCreature.location, activeCreature.direction);
+    if (isSquareInBoundary(facedSquare, grid))
+        return isSquareEmpty(facedSquare, grid);
     else
         return false;
 }
