@@ -147,7 +147,15 @@ instruction_t getInstruction(string &line)
     iss.str(line);
     string nameOfOpcode;
     iss >> nameOfOpcode;
-    newInstruction.op = encodeOpName(nameOfOpcode);
+    try
+    {
+        newInstruction.op = encodeOpName(nameOfOpcode);
+    }
+    catch (string illegalInstruction)
+    {
+        cout << "Error: Instruction " << illegalInstruction << " is not recognized!" << endl;
+        throw illegalInstruction;
+    }
     newInstruction.address = -1;
     if (isWithAddress(newInstruction.op))
     {
@@ -165,7 +173,7 @@ opcode_t encodeOpName(string nameOfOpcode)
         if (opName[i] == nameOfOpcode)
             return (opcode_t)i;
     }
-    assert(0);
+    throw nameOfOpcode;
     return (opcode_t)0;
 }
 
