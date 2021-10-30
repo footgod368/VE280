@@ -1,2 +1,4 @@
 left 3
 left
+ifempty 2
+go 1

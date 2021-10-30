@@ -27,12 +27,5 @@ int main(int argc, char *argv[])
         }
     }
 
-    // cout << roundsNum << endl
-    //      << (outputMode == Verbose) << endl
-    //      << world.numCreatures << endl;
-    // viewGrid(world);
-    // doLeft(0, world, outputMode);
-    // cout << world.creatures[0].species->programSize << endl;
-    // cout << opName[world.creatures[1].species->program[1].op] << endl;
     return 0;
 }

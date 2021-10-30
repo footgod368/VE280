@@ -1,2 +1,4 @@
 left   do left then right
 right
+ifempty 2
+go 1

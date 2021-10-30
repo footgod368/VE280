@@ -324,6 +324,19 @@ void doInfect(const int &i, world_t &world, OutputMode outputMode)
 }
 void doIfEmpty(const int &i, world_t &world, OutputMode outputMode)
 {
+    creature_t &activeCreature = world.creatures[i];
+    instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
+    if (outputMode == Verbose)
+        cout << "Instruction " << (activeCreature.programID + 1) << ": ifempty " << instructionNow.address << endl;
+    point_t facedSquare = sqaureFaced(activeCreature.location, activeCreature.direction);
+    bool isInBoundary = isSquareInBoundary(facedSquare, world.grid);
+    bool isEmpty = isSquareEmpty(facedSquare, world.grid);
+    if (isInBoundary && isEmpty)
+    {
+        activeCreature.programID = instructionNow.address - 1;
+    }
+    else
+        activeCreature.programID += 1;
 }
 void doIfEnemy(const int &i, world_t &world, OutputMode outputMode)
 {
@@ -338,4 +351,47 @@ void doGo(const int &i, world_t &world, OutputMode outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
     instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
+    if (outputMode == Verbose)
+        cout << "Instruction " << (activeCreature.programID + 1) << ": go " << instructionNow.address << endl;
+    activeCreature.programID = instructionNow.address - 1;
+}
+
+point_t sqaureFaced(const point_t &loactionNow, const direction_t &facingDir)
+{
+    point_t facedSquare = loactionNow;
+    switch (facingDir)
+    {
+    case EAST:
+        facedSquare.c += 1;
+        return facedSquare;
+        break;
+    case WEST:
+        facedSquare.c -= 1;
+        return facedSquare;
+        break;
+    case NORTH:
+        facedSquare.r -= 1;
+        return facedSquare;
+        break;
+    case SOUTH:
+        facedSquare.r += 1;
+        return facedSquare;
+        break;
+    default:
+        throw facingDir;
+        return facedSquare;
+        break;
+    }
+}
+
+bool isSquareInBoundary(const point_t &square, const grid_t &grid)
+{
+    return square.r >= 0 && square.r < grid.height && square.c >= 0 && square.c < grid.width;
+}
+
+bool isSquareEmpty(const point_t &square, const grid_t &grid)
+{
+    int row = square.r;
+    int col = square.c;
+    return grid.squares[row][col] == NULL;
 }

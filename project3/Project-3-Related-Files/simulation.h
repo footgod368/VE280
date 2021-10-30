@@ -46,4 +46,9 @@ void doIfSame(const int &i, world_t &world, OutputMode outputMode);
 void doIfWall(const int &i, world_t &world, OutputMode outputMode);
 void doGo(const int &i, world_t &world, OutputMode outputMode);
 
+point_t sqaureFaced(const point_t &loactionNow, const direction_t &facingDir);
+
+bool isSquareInBoundary(const point_t &square, const grid_t &grid);
+bool isSquareEmpty(const point_t &square, const grid_t &grid);
+
 #endif
