@@ -56,4 +56,7 @@ bool isLegalHop(const creature_t &activeCreature, const grid_t &grid);
 
 void checkArgc(int argc);
 void checkRoundsNum(int roundsNum);
+
+void checkOverlapped(const world_t &world);
+
 #endif

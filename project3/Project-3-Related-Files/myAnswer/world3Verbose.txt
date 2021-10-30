@@ -1,7 +1,0 @@
-Error: Number of simulation rounds is negative!
-Initial state
-____ ____ ____ ho_w ____ 
-____ fl_e ____ ____ ____ 
-lr_n ____ ____ ____ ____ 
-____ ____ fo_s ____ ____ 
-____ ____ ____ ____ la_s 

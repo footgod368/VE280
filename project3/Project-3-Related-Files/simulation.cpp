@@ -116,6 +116,15 @@ void initWorld(const string &speciesSummary, const string &worldFile, world_t &w
 
     initCreatures(creaturesNum, creaturesInfo, world);
 
+    try
+    {
+        checkOverlapped(world);
+    }
+    catch (int index)
+    {
+        throw index;
+    }
+
     updateGrid(world);
 }
 
@@ -626,5 +635,33 @@ void checkRoundsNum(int roundsNum)
     {
         cout << "Error: Number of simulation rounds is negative!" << endl;
         throw roundsNum;
+    }
+}
+
+void checkOverlapped(const world_t &world)
+{
+
+    for (unsigned int i = 0; i < world.numCreatures - 1; i++)
+    {
+        const creature_t &firstCreature = world.creatures[i];
+        for (unsigned int j = i + 1; j < world.numCreatures; j++)
+        {
+            const creature_t &secondCreature = world.creatures[j];
+            if (firstCreature.location.r == secondCreature.location.r && firstCreature.location.c == secondCreature.location.c)
+            {
+                cout << "Error: Creature ("
+                     << secondCreature.species->name
+                     << " " << directName[secondCreature.direction]
+                     << " " << secondCreature.location.r
+                     << " " << secondCreature.location.c
+                     << ") overlaps with creature ("
+                     << firstCreature.species->name << " "
+                     << directName[firstCreature.direction]
+                     << " " << firstCreature.location.r << " "
+                     << firstCreature.location.c << ")!" << endl;
+
+                throw j;
+            }
+        }
     }
 }
