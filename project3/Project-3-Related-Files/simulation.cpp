@@ -264,13 +264,14 @@ void doHop(const int &i, world_t &world, OutputMode outputMode)
         cout << "hop" << endl;
     else
         cout << "Instruction " << (activeCreature.programID + 1) << ": hop" << endl;
-    while (isLegalHop(activeCreature, world.grid))
+    if (isLegalHop(activeCreature, world.grid))
     {
         activeCreature.location = sqaureFaced(activeCreature.location, activeCreature.direction);
-        updateGrid(world);
     }
     activeCreature.programID += 1;
-    viewGrid(world);
+    updateGrid(world);
+    if (outputMode == Verbose)
+        viewGrid(world);
 }
 void doLeft(const int &i, world_t &world, OutputMode outputMode)
 {
@@ -300,7 +301,8 @@ void doLeft(const int &i, world_t &world, OutputMode outputMode)
     }
     activeCreature.programID += 1;
     updateGrid(world);
-    viewGrid(world);
+    if (outputMode == Verbose)
+        viewGrid(world);
 }
 void doRight(const int &i, world_t &world, OutputMode outputMode)
 {
@@ -330,7 +332,8 @@ void doRight(const int &i, world_t &world, OutputMode outputMode)
     }
     activeCreature.programID += 1;
     updateGrid(world);
-    viewGrid(world);
+    if (outputMode == Verbose)
+        viewGrid(world);
 }
 void doInfect(const int &i, world_t &world, OutputMode outputMode)
 {
@@ -349,7 +352,8 @@ void doInfect(const int &i, world_t &world, OutputMode outputMode)
     }
     activeCreature.programID += 1;
     updateGrid(world);
-    viewGrid(world);
+    if (outputMode == Verbose)
+        viewGrid(world);
 }
 void doIfEmpty(const int &i, world_t &world, OutputMode outputMode)
 {

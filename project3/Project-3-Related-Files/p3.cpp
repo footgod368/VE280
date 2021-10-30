@@ -18,6 +18,9 @@ int main(int argc, char *argv[])
 
     world_t world = initWorld(speciesSummary, worldFile);
 
+    cout << "Initial state" << endl;
+    viewGrid(world);
+
     for (int roundCount = 1; roundCount <= roundsNum; roundCount++)
     {
         cout << "Round " << roundCount << endl;
@@ -25,6 +28,8 @@ int main(int argc, char *argv[])
         {
             oneTakeAction(i, world, outputMode);
         }
+        if (outputMode == Concise)
+            viewGrid(world);
     }
 
     return 0;

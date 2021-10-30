@@ -1,5 +1,4 @@
 4
-5
-only_left east 2 0
-left_right east 2 3
-only_left east 1 0
+4
+hop east 2 0
+flytrap east 2 2
