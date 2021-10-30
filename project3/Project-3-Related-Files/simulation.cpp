@@ -338,6 +338,15 @@ void doIfEmpty(const int &i, world_t &world, OutputMode outputMode)
 }
 void doIfEnemy(const int &i, world_t &world, OutputMode outputMode)
 {
+    creature_t &activeCreature = world.creatures[i];
+    instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
+    if (outputMode == Verbose)
+        cout << "Instruction " << (activeCreature.programID + 1) << ": ifenemy " << instructionNow.address << endl;
+    point_t facedSquare = sqaureFaced(activeCreature.location, activeCreature.direction);
+    if (isFacingEnemy(activeCreature, world.grid))
+        activeCreature.programID = instructionNow.address - 1;
+    else
+        activeCreature.programID += 1;
 }
 void doIfSame(const int &i, world_t &world, OutputMode outputMode)
 {
@@ -401,4 +410,20 @@ bool isSquareEmpty(const point_t &square, const grid_t &grid)
     int row = square.r;
     int col = square.c;
     return grid.squares[row][col] == NULL;
+}
+
+bool isFacingEnemy(const creature_t &activeCreature, const grid_t &grid)
+{
+    point_t facedSquare = sqaureFaced(activeCreature.location, activeCreature.direction);
+    if (isSquareInBoundary(facedSquare, grid))
+    {
+        if (!isSquareEmpty(facedSquare, grid))
+        {
+            return activeCreature.species->name != grid.squares[facedSquare.r][facedSquare.c]->species->name;
+        }
+        else
+            return false;
+    }
+    else
+        return false;
 }

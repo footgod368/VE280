@@ -1,5 +1,6 @@
 left 3
 left
+ifenemy 2
 ifwall 2
 ifempty 2
 go 1
