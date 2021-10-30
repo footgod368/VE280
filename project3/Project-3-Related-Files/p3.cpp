@@ -8,15 +8,44 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+    try
+    {
+        checkArgc(argc);
+    }
+    catch (...)
+    {
+        return 0;
+    }
     string speciesSummary(argv[1]);
     string worldFile(argv[2]);
-    string verboseSpecifier(argv[4]);
     int roundsNum = atoi(argv[3]);
-    OutputMode outputMode = Concise;
-    if (verboseSpecifier == "v" || verboseSpecifier == "verbose")
-        outputMode = Verbose;
 
-    world_t world = initWorld(speciesSummary, worldFile);
+    try
+    {
+        checkRoundsNum(roundsNum);
+    }
+    catch (...)
+    {
+        return 0;
+    }
+
+    OutputMode outputMode = Concise;
+    if (argc > 4)
+    {
+        string verboseSpecifier(argv[4]);
+        if (verboseSpecifier == "v" || verboseSpecifier == "verbose")
+            outputMode = Verbose;
+    }
+
+    world_t world;
+    try
+    {
+        world = initWorld(speciesSummary, worldFile);
+    }
+    catch (...)
+    {
+        return 0;
+    }
 
     cout << "Initial state" << endl;
     viewGrid(world);

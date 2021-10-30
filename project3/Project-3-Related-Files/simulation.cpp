@@ -4,13 +4,23 @@
 #include <cstdlib>
 #include <fstream>
 #include <sstream>
-
+#include <cassert>
 using namespace std;
 
 void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, string speciesInfo[], int &speciesNum)
 {
     ifstream fin;
-    fin.open(speciesSummary);
+    try
+    {
+        fin.open(speciesSummary);
+        if (!fin)
+            throw speciesSummary;
+    }
+    catch (string path)
+    {
+        cout << "Cannot open file " << path << "!" << endl;
+        throw path;
+    }
     string line;
     getline(fin, line);
     pathOfSpecies = line;
@@ -19,12 +29,32 @@ void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, str
         speciesInfo[speciesNum++] = line;
     }
     fin.close();
+    try
+    {
+        if (speciesNum > MAXSPECIES)
+            throw speciesNum;
+    }
+    catch (int speciesNum)
+    {
+        cout << "Error: Too many species!" << endl
+             << "Maximal number of species is " << MAXSPECIES << "." << endl;
+        throw speciesNum;
+    }
 }
 
 void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, string creaturesInfo[], int &creaturesNum)
 {
     ifstream fin;
-    fin.open(worldFile);
+    try
+    {
+        fin.open(worldFile);
+        if (!fin)
+            throw worldFile;
+    }
+    catch (string path)
+    {
+        cout << "Cannot open file " << path << "!" << endl;
+    }
     string line;
     getline(fin, line);
     gridHeight = stoi(line);
@@ -52,6 +82,7 @@ world_t initWorld(const string &speciesSummary, const string &worldFile)
     readWorldFile(worldFile, gridWidth, gridHeight, creaturesInfo, creaturesNum);
 
     initSpecies(speciesNum, speciesInfo, pathOfSpecies, world);
+
     initCreatures(creaturesNum, creaturesInfo, world);
 
     world.grid.width = gridWidth;
@@ -74,13 +105,34 @@ void initSpecies(const int &speciesNum, string speciesInfo[], const string &path
 
         string pathOfInfo = pathOfSpecies + "/" + newSpeice.name; // ?
         ifstream fin;
-        fin.open(pathOfInfo);
+        try
+        {
+            fin.open(pathOfInfo);
+            if (!fin)
+                throw pathOfInfo;
+        }
+        catch (string path)
+        {
+            cout << "Cannot open file " << path << "!" << endl;
+            throw path;
+        }
         string line;
         while (getline(fin, line))
         {
             if (line.empty())
                 break;
             instruction_t newOpcode = getInstruction(line);
+            try
+            {
+                if (newSpeice.programSize > MAXPROGRAM)
+                    throw newSpeice.name;
+            }
+            catch (string specieName)
+            {
+                cout << "Too many instructions for species " << specieName << "!" << endl
+                     << "Maximal number of instructions is " << MAXPROGRAM << "." << endl;
+                throw specieName;
+            }
             newSpeice.program[newSpeice.programSize++] = newOpcode;
         }
         fin.close();
@@ -113,7 +165,7 @@ opcode_t encodeOpName(string nameOfOpcode)
         if (opName[i] == nameOfOpcode)
             return (opcode_t)i;
     }
-    throw nameOfOpcode;
+    assert(0);
     return (opcode_t)0;
 }
 
@@ -151,7 +203,7 @@ direction_t encodeDirName(string dirName)
         if (directName[i] == dirName)
             return (direction_t)i;
     }
-    throw dirName;
+    assert(0);
     return (direction_t)0;
 }
 
@@ -250,7 +302,7 @@ void oneTakeAction(int i, world_t &world, OutputMode outputMode)
             doGo(i, world, outputMode);
             break;
         default:
-            throw instructionNow.op;
+            assert(0);
             break;
         }
     } while (instructionNow.op > 3);
@@ -296,7 +348,7 @@ void doLeft(const int &i, world_t &world, OutputMode outputMode)
         activeCreature.direction = NORTH;
         break;
     default:
-        throw activeCreature.direction;
+        assert(0);
         break;
     }
     activeCreature.programID += 1;
@@ -327,7 +379,7 @@ void doRight(const int &i, world_t &world, OutputMode outputMode)
         activeCreature.direction = SOUTH;
         break;
     default:
-        throw activeCreature.direction;
+        assert(0);
         break;
     }
     activeCreature.programID += 1;
@@ -436,7 +488,7 @@ point_t sqaureFaced(const point_t &loactionNow, const direction_t &facingDir)
         return facedSquare;
         break;
     default:
-        throw facingDir;
+        assert(0);
         return facedSquare;
         break;
     }
@@ -493,4 +545,23 @@ bool isLegalHop(const creature_t &activeCreature, const grid_t &grid)
         return isSquareEmpty(facedSquare, grid);
     else
         return false;
+}
+
+void checkArgc(int argc)
+{
+    if (argc < 4)
+    {
+        cout << "Error: Missing arguments!" << endl
+             << "Usage: ./p3 <species-summary> <world-file> <rounds> [v|verbose]" << endl;
+        throw argc;
+    }
+}
+
+void checkRoundsNum(int roundsNum)
+{
+    if (roundsNum < 0)
+    {
+        cout << "Error: Number of simulation rounds is negative!" << endl;
+        throw roundsNum;
+    }
 }

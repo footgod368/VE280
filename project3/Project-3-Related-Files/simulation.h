@@ -54,4 +54,6 @@ bool isFacingEnemy(const creature_t &activeCreature, const grid_t &grid);
 bool isFacingSame(const creature_t &activeCreature, const grid_t &grid);
 bool isLegalHop(const creature_t &activeCreature, const grid_t &grid);
 
+void checkArgc(int argc);
+void checkRoundsNum(int roundsNum);
 #endif
