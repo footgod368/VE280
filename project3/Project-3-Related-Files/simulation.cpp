@@ -58,8 +58,28 @@ void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, str
     string line;
     getline(fin, line);
     gridHeight = stoi(line);
+    try
+    {
+        if (gridHeight < 1 || (unsigned int)gridHeight > MAXHEIGHT)
+            throw gridHeight;
+    }
+    catch (int illegalGridHeight)
+    {
+        cout << "Error: The grid height is illegal!" << endl;
+        throw illegalGridHeight;
+    }
     getline(fin, line);
     gridWidth = stoi(line);
+    try
+    {
+        if (gridWidth < 1 || (unsigned int)gridWidth > MAXWIDTH)
+            throw gridWidth;
+    }
+    catch (int illegalGridWidth)
+    {
+        cout << "Error: The grid width is illegal!" << endl;
+        throw illegalGridWidth;
+    }
     while (getline(fin, line))
     {
         try
@@ -91,13 +111,12 @@ world_t initWorld(const string &speciesSummary, const string &worldFile)
     int gridWidth, gridHeight;
     string creaturesInfo[MAXCREATURES];
     readWorldFile(worldFile, gridWidth, gridHeight, creaturesInfo, creaturesNum);
-
+    world.grid.width = gridWidth;
+    world.grid.height = gridHeight;
     initSpecies(speciesNum, speciesInfo, pathOfSpecies, world);
 
     initCreatures(creaturesNum, creaturesInfo, world);
 
-    world.grid.width = gridWidth;
-    world.grid.height = gridHeight;
     updateGrid(world);
 
     return world;
@@ -114,7 +133,7 @@ void initSpecies(const int &speciesNum, string speciesInfo[], const string &path
 
         newSpeice.programSize = 0;
 
-        string pathOfInfo = pathOfSpecies + "/" + newSpeice.name; // ?
+        string pathOfInfo = pathOfSpecies + "/" + newSpeice.name;
         ifstream fin;
         try
         {
@@ -208,7 +227,27 @@ void initCreatures(const int &creaturesNum, string creaturesInfo[], world_t &wor
         istringstream iss;
         iss.str(line);
         iss >> specieName >> dirName >> newCreature.location.r >> newCreature.location.c;
-        newCreature.direction = encodeDirName(dirName);
+        // try
+        // {
+        //     if (!isSquareInBoundary(newCreature.location, world.grid))
+        //         throw newCreature;
+        // }
+        // catch (creature_t newCreature)
+        // {
+        //     cout << "Error: Creature (" << line << ") is out of bound!" << endl
+        //          << "The grid size is " << world.grid.height << "-by-" << world.grid.width << endl;
+        //     throw newCreature.location;
+        // }
+
+        try
+        {
+            newCreature.direction = encodeDirName(dirName);
+        }
+        catch (string unknownDirName)
+        {
+            cout << "Error: Direction " << unknownDirName << " is not recognized!" << endl;
+            throw unknownDirName;
+        }
         setSpecie(specieName, newCreature, world);
 
         world.creatures[i] = newCreature;
@@ -222,16 +261,30 @@ direction_t encodeDirName(string dirName)
         if (directName[i] == dirName)
             return (direction_t)i;
     }
-    assert(0);
+    throw dirName;
     return (direction_t)0;
 }
 
 void setSpecie(const string &specieName, creature_t &newCreature, world_t &world)
 {
+    bool isInSpeciesList = false;
     for (unsigned int i = 0; i < world.numSpecies; i++)
     {
         if (specieName == world.species[i].name)
+        {
             newCreature.species = &world.species[i];
+            isInSpeciesList = true;
+        }
+    }
+    try
+    {
+        if (!isInSpeciesList)
+            throw specieName;
+    }
+    catch (string UnknownSpeciesName)
+    {
+        cout << "Species " << UnknownSpeciesName << " not found!" << endl;
+        throw UnknownSpeciesName;
     }
 }
 
