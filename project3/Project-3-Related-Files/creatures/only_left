@@ -1,4 +1,5 @@
 left 3
 left
+ifwall 2
 ifempty 2
 go 1

@@ -332,9 +332,7 @@ void doIfEmpty(const int &i, world_t &world, OutputMode outputMode)
     bool isInBoundary = isSquareInBoundary(facedSquare, world.grid);
     bool isEmpty = isSquareEmpty(facedSquare, world.grid);
     if (isInBoundary && isEmpty)
-    {
         activeCreature.programID = instructionNow.address - 1;
-    }
     else
         activeCreature.programID += 1;
 }
@@ -346,6 +344,15 @@ void doIfSame(const int &i, world_t &world, OutputMode outputMode)
 }
 void doIfWall(const int &i, world_t &world, OutputMode outputMode)
 {
+    creature_t &activeCreature = world.creatures[i];
+    instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
+    if (outputMode == Verbose)
+        cout << "Instruction " << (activeCreature.programID + 1) << ": ifwall " << instructionNow.address << endl;
+    point_t facedSquare = sqaureFaced(activeCreature.location, activeCreature.direction);
+    if (!isSquareInBoundary(facedSquare, world.grid))
+        activeCreature.programID = instructionNow.address - 1;
+    else
+        activeCreature.programID += 1;
 }
 void doGo(const int &i, world_t &world, OutputMode outputMode)
 {
