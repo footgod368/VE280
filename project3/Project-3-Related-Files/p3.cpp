@@ -18,6 +18,21 @@ int main(int argc, char *argv[])
 
     world_t world = initWorld(speciesSummary, worldFile);
 
-    viewGrid(world);
+    for (int roundCount = 1; roundCount <= roundsNum; roundCount++)
+    {
+        cout << "Round " << roundCount << endl;
+        for (int i = 0; i < world.numCreatures; i++)
+        {
+            oneTakeAction(i, world, outputMode);
+        }
+    }
+
+    // cout << roundsNum << endl
+    //      << (outputMode == Verbose) << endl
+    //      << world.numCreatures << endl;
+    // viewGrid(world);
+    // doLeft(0, world, outputMode);
+    // cout << world.creatures[0].species->programSize << endl;
+    // cout << opName[world.creatures[1].species->program[1].op] << endl;
     return 0;
 }

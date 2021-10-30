@@ -96,7 +96,7 @@ instruction_t getInstruction(string &line)
     string nameOfOpcode;
     iss >> nameOfOpcode;
     newInstruction.op = encodeOpName(nameOfOpcode);
-    newInstruction.address = 0;
+    newInstruction.address = -1;
     if (isWithAddress(newInstruction.op))
     {
         unsigned int address;
@@ -203,4 +203,139 @@ void viewGrid(const world_t &world)
         }
         cout << endl;
     }
+}
+
+void oneTakeAction(int i, world_t &world, OutputMode outputMode)
+{
+    creature_t &activeCreature = world.creatures[i];
+    string speciesName = activeCreature.species->name;
+    string direction = directName[activeCreature.direction];
+    int row = activeCreature.location.r;
+    int col = activeCreature.location.c;
+    if (outputMode == Concise)
+        cout << "Creature (" << speciesName << " " << direction << " " << row << " " << col << ") takes action: " << flush;
+    else
+        cout << "Creature (" << speciesName << " " << direction << " " << row << " " << col << ") takes action:" << endl;
+    instruction_t instructionNow;
+    do
+    {
+        instructionNow = activeCreature.species->program[activeCreature.programID];
+        switch (instructionNow.op)
+        {
+        case HOP:
+            doHop(i, world, outputMode);
+            break;
+        case LEFT:
+            doLeft(i, world, outputMode);
+            break;
+        case RIGHT:
+            doRight(i, world, outputMode);
+            break;
+        case INFECT:
+            doInfect(i, world, outputMode);
+            break;
+        case IFEMPTY:
+            doIfEmpty(i, world, outputMode);
+            break;
+        case IFENEMY:
+            doIfEnemy(i, world, outputMode);
+            break;
+        case IFSAME:
+            doIfSame(i, world, outputMode);
+            break;
+        case IFWALL:
+            doIfWall(i, world, outputMode);
+            break;
+        case GO:
+            doGo(i, world, outputMode);
+            break;
+        default:
+            throw instructionNow.op;
+            break;
+        }
+    } while (instructionNow.op > 3);
+}
+
+void doHop(const int &i, world_t &world, OutputMode outputMode)
+{
+}
+void doLeft(const int &i, world_t &world, OutputMode outputMode)
+{
+    creature_t &activeCreature = world.creatures[i];
+    instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
+    if (outputMode == Concise)
+        cout << "left" << endl;
+    else
+        cout << "Instruction " << (activeCreature.programID + 1) << ": left" << endl;
+    switch (activeCreature.direction)
+    {
+    case NORTH:
+        activeCreature.direction = WEST;
+        break;
+    case WEST:
+        activeCreature.direction = SOUTH;
+        break;
+    case SOUTH:
+        activeCreature.direction = EAST;
+        break;
+    case EAST:
+        activeCreature.direction = NORTH;
+        break;
+    default:
+        throw activeCreature.direction;
+        break;
+    }
+    activeCreature.programID += 1;
+    updateGrid(world);
+    viewGrid(world);
+}
+void doRight(const int &i, world_t &world, OutputMode outputMode)
+{
+    creature_t &activeCreature = world.creatures[i];
+    instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
+    if (outputMode == Concise)
+        cout << "right" << endl;
+    else
+        cout << "Instruction " << (activeCreature.programID + 1) << ": right" << endl;
+    switch (activeCreature.direction)
+    {
+    case NORTH:
+        activeCreature.direction = EAST;
+        break;
+    case WEST:
+        activeCreature.direction = NORTH;
+        break;
+    case SOUTH:
+        activeCreature.direction = WEST;
+        break;
+    case EAST:
+        activeCreature.direction = SOUTH;
+        break;
+    default:
+        throw activeCreature.direction;
+        break;
+    }
+    activeCreature.programID += 1;
+    updateGrid(world);
+    viewGrid(world);
+}
+void doInfect(const int &i, world_t &world, OutputMode outputMode)
+{
+}
+void doIfEmpty(const int &i, world_t &world, OutputMode outputMode)
+{
+}
+void doIfEnemy(const int &i, world_t &world, OutputMode outputMode)
+{
+}
+void doIfSame(const int &i, world_t &world, OutputMode outputMode)
+{
+}
+void doIfWall(const int &i, world_t &world, OutputMode outputMode)
+{
+}
+void doGo(const int &i, world_t &world, OutputMode outputMode)
+{
+    creature_t &activeCreature = world.creatures[i];
+    instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
 }

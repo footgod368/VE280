@@ -35,4 +35,15 @@ creature_t *getCreatureInSquare(int i, int j, world_t &world);
 
 void viewGrid(const world_t &world);
 
+void oneTakeAction(int i, world_t &world, OutputMode outputMode);
+void doHop(const int &i, world_t &world, OutputMode outputMode);
+void doLeft(const int &i, world_t &world, OutputMode outputMode);
+void doRight(const int &i, world_t &world, OutputMode outputMode);
+void doInfect(const int &i, world_t &world, OutputMode outputMode);
+void doIfEmpty(const int &i, world_t &world, OutputMode outputMode);
+void doIfEnemy(const int &i, world_t &world, OutputMode outputMode);
+void doIfSame(const int &i, world_t &world, OutputMode outputMode);
+void doIfWall(const int &i, world_t &world, OutputMode outputMode);
+void doGo(const int &i, world_t &world, OutputMode outputMode);
+
 #endif
