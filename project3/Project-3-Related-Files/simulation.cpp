@@ -26,20 +26,20 @@ void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, str
     pathOfSpecies = line;
     while (getline(fin, line))
     {
+        try
+        {
+            if ((unsigned int)speciesNum >= MAXSPECIES)
+                throw speciesNum;
+        }
+        catch (int speciesNum)
+        {
+            cout << "Error: Too many species!" << endl
+                 << "Maximal number of species is " << MAXSPECIES << "." << endl;
+            throw speciesNum;
+        }
         speciesInfo[speciesNum++] = line;
     }
     fin.close();
-    try
-    {
-        if (speciesNum > MAXSPECIES)
-            throw speciesNum;
-    }
-    catch (int speciesNum)
-    {
-        cout << "Error: Too many species!" << endl
-             << "Maximal number of species is " << MAXSPECIES << "." << endl;
-        throw speciesNum;
-    }
 }
 
 void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, string creaturesInfo[], int &creaturesNum)
@@ -62,6 +62,17 @@ void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, str
     gridWidth = stoi(line);
     while (getline(fin, line))
     {
+        try
+        {
+            if ((unsigned int)creaturesNum >= MAXCREATURES)
+                throw creaturesNum;
+        }
+        catch (int creaturesNum)
+        {
+            cout << "Too many creatures!" << endl
+                 << "Maximal number of creatures is " << MAXCREATURES << "." << endl;
+            throw creaturesNum;
+        }
         creaturesInfo[creaturesNum++] = line;
     }
     fin.close();
@@ -217,7 +228,7 @@ direction_t encodeDirName(string dirName)
 
 void setSpecie(const string &specieName, creature_t &newCreature, world_t &world)
 {
-    for (int i = 0; i < world.numSpecies; i++)
+    for (unsigned int i = 0; i < world.numSpecies; i++)
     {
         if (specieName == world.species[i].name)
             newCreature.species = &world.species[i];
@@ -226,9 +237,9 @@ void setSpecie(const string &specieName, creature_t &newCreature, world_t &world
 
 void updateGrid(world_t &world)
 {
-    for (int i = 0; i < world.grid.height; i++)
+    for (unsigned int i = 0; i < world.grid.height; i++)
     {
-        for (int j = 0; j < world.grid.width; j++)
+        for (unsigned int j = 0; j < world.grid.width; j++)
         {
             world.grid.squares[i][j] = getCreatureInSquare(i, j, world);
         }
@@ -237,7 +248,7 @@ void updateGrid(world_t &world)
 
 creature_t *getCreatureInSquare(int i, int j, world_t &world)
 {
-    for (int k = 0; k < world.numCreatures; k++)
+    for (unsigned int k = 0; k < world.numCreatures; k++)
     {
         if (world.creatures[k].location.r == i && world.creatures[k].location.c == j)
             return &world.creatures[k];
@@ -247,9 +258,9 @@ creature_t *getCreatureInSquare(int i, int j, world_t &world)
 
 void viewGrid(const world_t &world)
 {
-    for (int i = 0; i < world.grid.height; i++)
+    for (unsigned int i = 0; i < world.grid.height; i++)
     {
-        for (int j = 0; j < world.grid.width; j++)
+        for (unsigned int j = 0; j < world.grid.width; j++)
         {
             if (world.grid.squares[i][j] == NULL)
                 cout << "____ ";
@@ -319,7 +330,6 @@ void oneTakeAction(int i, world_t &world, OutputMode outputMode)
 void doHop(const int &i, world_t &world, OutputMode outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
-    instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
     if (outputMode == Concise)
         cout << "hop" << endl;
     else
@@ -336,7 +346,6 @@ void doHop(const int &i, world_t &world, OutputMode outputMode)
 void doLeft(const int &i, world_t &world, OutputMode outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
-    instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
     if (outputMode == Concise)
         cout << "left" << endl;
     else
@@ -367,7 +376,6 @@ void doLeft(const int &i, world_t &world, OutputMode outputMode)
 void doRight(const int &i, world_t &world, OutputMode outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
-    instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
     if (outputMode == Concise)
         cout << "right" << endl;
     else
@@ -398,7 +406,6 @@ void doRight(const int &i, world_t &world, OutputMode outputMode)
 void doInfect(const int &i, world_t &world, OutputMode outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
-    instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
     if (outputMode == Concise)
         cout << "infect" << endl;
     else
@@ -435,7 +442,6 @@ void doIfEnemy(const int &i, world_t &world, OutputMode outputMode)
     instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
     if (outputMode == Verbose)
         cout << "Instruction " << (activeCreature.programID + 1) << ": ifenemy " << instructionNow.address << endl;
-    point_t facedSquare = sqaureFaced(activeCreature.location, activeCreature.direction);
     if (isFacingEnemy(activeCreature, world.grid))
         activeCreature.programID = instructionNow.address - 1;
     else
@@ -447,7 +453,6 @@ void doIfSame(const int &i, world_t &world, OutputMode outputMode)
     instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
     if (outputMode == Verbose)
         cout << "Instruction " << (activeCreature.programID + 1) << ": ifsame " << instructionNow.address << endl;
-    point_t facedSquare = sqaureFaced(activeCreature.location, activeCreature.direction);
     if (isFacingSame(activeCreature, world.grid))
         activeCreature.programID = instructionNow.address - 1;
     else
@@ -504,7 +509,7 @@ point_t sqaureFaced(const point_t &loactionNow, const direction_t &facingDir)
 
 bool isSquareInBoundary(const point_t &square, const grid_t &grid)
 {
-    return square.r >= 0 && square.r < grid.height && square.c >= 0 && square.c < grid.width;
+    return square.r >= 0 && (unsigned int)square.r < grid.height && square.c >= 0 && (unsigned int)square.c < grid.width;
 }
 
 bool isSquareEmpty(const point_t &square, const grid_t &grid)

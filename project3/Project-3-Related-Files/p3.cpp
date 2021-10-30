@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
     {
         return 0;
     }
+
     string speciesSummary(argv[1]);
     string worldFile(argv[2]);
     int roundsNum = atoi(argv[3]);
@@ -53,7 +54,7 @@ int main(int argc, char *argv[])
     for (int roundCount = 1; roundCount <= roundsNum; roundCount++)
     {
         cout << "Round " << roundCount << endl;
-        for (int i = 0; i < world.numCreatures; i++)
+        for (unsigned int i = 0; i < world.numCreatures; i++)
         {
             oneTakeAction(i, world, outputMode);
         }
