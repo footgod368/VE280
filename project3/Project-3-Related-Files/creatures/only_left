@@ -1,6 +1,4 @@
-left 3
+right 3
+ifsame 1
 left
-ifenemy 2
-ifwall 2
-ifempty 2
 go 1

@@ -2,3 +2,4 @@
 4
 only_left west 2 0
 left_right east 2 1
+only_left east 1 0
