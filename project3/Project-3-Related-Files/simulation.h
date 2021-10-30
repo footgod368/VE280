@@ -13,7 +13,7 @@ void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, str
 
 void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, string creaturesinfo[], int &creaturesNum);
 
-world_t initWorld(const string &speciesSummary, const string &worldFile);
+void initWorld(const string &speciesSummary, const string &worldFile, world_t &world);
 
 void initSpecies(const int &speciesNum, string speciesInfo[], const string &pathOfSpecies, world_t &world);
 

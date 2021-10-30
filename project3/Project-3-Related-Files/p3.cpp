@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     world_t world;
     try
     {
-        world = initWorld(speciesSummary, worldFile);
+        initWorld(speciesSummary, worldFile, world);
     }
     catch (...)
     {

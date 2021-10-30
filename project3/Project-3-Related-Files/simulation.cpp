@@ -31,11 +31,11 @@ void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, str
             if ((unsigned int)speciesNum >= MAXSPECIES)
                 throw speciesNum;
         }
-        catch (int speciesNum)
+        catch (int excessSpeciesNum)
         {
             cout << "Error: Too many species!" << endl
                  << "Maximal number of species is " << MAXSPECIES << "." << endl;
-            throw speciesNum;
+            throw excessSpeciesNum;
         }
         speciesInfo[speciesNum++] = line;
     }
@@ -98,9 +98,8 @@ void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, str
     fin.close();
 }
 
-world_t initWorld(const string &speciesSummary, const string &worldFile)
+void initWorld(const string &speciesSummary, const string &worldFile, world_t &world)
 {
-    world_t world;
 
     int speciesNum = 0;
     string pathOfSpecies;
@@ -118,8 +117,6 @@ world_t initWorld(const string &speciesSummary, const string &worldFile)
     initCreatures(creaturesNum, creaturesInfo, world);
 
     updateGrid(world);
-
-    return world;
 }
 
 void initSpecies(const int &speciesNum, string speciesInfo[], const string &pathOfSpecies, world_t &world)
@@ -227,17 +224,17 @@ void initCreatures(const int &creaturesNum, string creaturesInfo[], world_t &wor
         istringstream iss;
         iss.str(line);
         iss >> specieName >> dirName >> newCreature.location.r >> newCreature.location.c;
-        // try
-        // {
-        //     if (!isSquareInBoundary(newCreature.location, world.grid))
-        //         throw newCreature;
-        // }
-        // catch (creature_t newCreature)
-        // {
-        //     cout << "Error: Creature (" << line << ") is out of bound!" << endl
-        //          << "The grid size is " << world.grid.height << "-by-" << world.grid.width << endl;
-        //     throw newCreature.location;
-        // }
+        try
+        {
+            if (!isSquareInBoundary(newCreature.location, world.grid))
+                throw newCreature;
+        }
+        catch (creature_t newCreature)
+        {
+            cout << "Error: Creature (" << line << ") is out of bound!" << endl
+                 << "The grid size is " << world.grid.height << "-by-" << world.grid.width << endl;
+            throw newCreature.location;
+        }
 
         try
         {
