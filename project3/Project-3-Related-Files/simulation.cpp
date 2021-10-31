@@ -18,7 +18,7 @@ void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, str
     }
     catch (string path)
     {
-        cout << "Cannot open file " << path << "!" << endl;
+        cout << "Error: Cannot open file " << path << "!" << endl;
         throw path;
     }
     string line;
@@ -53,7 +53,7 @@ void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, str
     }
     catch (string path)
     {
-        cout << "Cannot open file " << path << "!" << endl;
+        cout << "Error: Cannot open file " << path << "!" << endl;
     }
     string line;
     getline(fin, line);
@@ -149,7 +149,7 @@ void initSpecies(const int &speciesNum, string speciesInfo[], const string &path
         }
         catch (string path)
         {
-            cout << "Cannot open file " << path << "!" << endl;
+            cout << "Error: Cannot open file " << path << "!" << endl;
             throw path;
         }
         string line;
@@ -383,7 +383,7 @@ void oneTakeAction(int i, world_t &world, OutputMode outputMode)
             assert(0);
             break;
         }
-    } while (instructionNow.op > 3);
+    } while (isWithAddress(instructionNow.op));
 }
 
 void doHop(const int &i, world_t &world, OutputMode outputMode)
