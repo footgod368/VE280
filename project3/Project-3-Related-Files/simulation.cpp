@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <cassert>
+#include <string>
 using namespace std;
 
 void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, string speciesInfo[], int &speciesNum)
@@ -16,10 +17,10 @@ void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, str
         if (!fin)
             throw speciesSummary;
     }
-    catch (string path)
+    catch (string wrongPath)
     {
-        cout << "Error: Cannot open file " << path << "!" << endl;
-        throw path;
+        cout << "Error: Cannot open file " << wrongPath << "!" << endl;
+        throw wrongPath;
     }
     string line;
     getline(fin, line);
@@ -51,9 +52,9 @@ void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, str
         if (!fin)
             throw worldFile;
     }
-    catch (string path)
+    catch (string wrongPath)
     {
-        cout << "Error: Cannot open file " << path << "!" << endl;
+        cout << "Error: Cannot open file " << wrongPath << "!" << endl;
     }
     string line;
     getline(fin, line);
@@ -176,7 +177,7 @@ void initSpecies(const int &speciesNum, string speciesInfo[], const string &path
     }
 }
 
-instruction_t getInstruction(string &line)
+instruction_t getInstruction(const string &line)
 {
     instruction_t newInstruction;
     istringstream iss;
@@ -202,7 +203,7 @@ instruction_t getInstruction(string &line)
     return newInstruction;
 }
 
-opcode_t encodeOpName(string nameOfOpcode)
+opcode_t encodeOpName(const string &nameOfOpcode)
 {
     for (int i = 0; i <= 8; i++)
     {
@@ -213,12 +214,12 @@ opcode_t encodeOpName(string nameOfOpcode)
     return (opcode_t)0;
 }
 
-bool isWithAddress(opcode_t opcode)
+bool isWithAddress(const opcode_t &opcode)
 {
     return (opcode > 3);
 }
 
-void initCreatures(const int &creaturesNum, string creaturesInfo[], world_t &world)
+void initCreatures(const int &creaturesNum, const string creaturesInfo[], world_t &world)
 {
     world.numCreatures = creaturesNum;
 
@@ -260,7 +261,7 @@ void initCreatures(const int &creaturesNum, string creaturesInfo[], world_t &wor
     }
 }
 
-direction_t encodeDirName(string dirName)
+direction_t encodeDirName(const string &dirName)
 {
     for (int i = 0; i < 4; i++)
     {
@@ -305,7 +306,7 @@ void updateGrid(world_t &world)
     }
 }
 
-creature_t *getCreatureInSquare(int i, int j, world_t &world)
+creature_t *getCreatureInSquare(const int &i, const int &j, world_t &world)
 {
     for (unsigned int k = 0; k < world.numCreatures; k++)
     {
@@ -335,7 +336,7 @@ void viewGrid(const world_t &world)
     }
 }
 
-void oneTakeAction(int i, world_t &world, OutputMode outputMode)
+void oneTakeAction(const int &i, world_t &world, const OutputMode &outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
     string speciesName = activeCreature.species->name;
@@ -386,7 +387,7 @@ void oneTakeAction(int i, world_t &world, OutputMode outputMode)
     } while (isWithAddress(instructionNow.op));
 }
 
-void doHop(const int &i, world_t &world, OutputMode outputMode)
+void doHop(const int &i, world_t &world, const OutputMode &outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
     if (outputMode == Concise)
@@ -402,7 +403,7 @@ void doHop(const int &i, world_t &world, OutputMode outputMode)
     if (outputMode == Verbose)
         viewGrid(world);
 }
-void doLeft(const int &i, world_t &world, OutputMode outputMode)
+void doLeft(const int &i, world_t &world, const OutputMode &outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
     if (outputMode == Concise)
@@ -432,7 +433,7 @@ void doLeft(const int &i, world_t &world, OutputMode outputMode)
     if (outputMode == Verbose)
         viewGrid(world);
 }
-void doRight(const int &i, world_t &world, OutputMode outputMode)
+void doRight(const int &i, world_t &world, const OutputMode &outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
     if (outputMode == Concise)
@@ -462,7 +463,7 @@ void doRight(const int &i, world_t &world, OutputMode outputMode)
     if (outputMode == Verbose)
         viewGrid(world);
 }
-void doInfect(const int &i, world_t &world, OutputMode outputMode)
+void doInfect(const int &i, world_t &world, const OutputMode &outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
     if (outputMode == Concise)
@@ -481,7 +482,7 @@ void doInfect(const int &i, world_t &world, OutputMode outputMode)
     if (outputMode == Verbose)
         viewGrid(world);
 }
-void doIfEmpty(const int &i, world_t &world, OutputMode outputMode)
+void doIfEmpty(const int &i, world_t &world, const OutputMode &outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
     instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
@@ -495,7 +496,7 @@ void doIfEmpty(const int &i, world_t &world, OutputMode outputMode)
     else
         activeCreature.programID += 1;
 }
-void doIfEnemy(const int &i, world_t &world, OutputMode outputMode)
+void doIfEnemy(const int &i, world_t &world, const OutputMode &outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
     instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
@@ -506,7 +507,7 @@ void doIfEnemy(const int &i, world_t &world, OutputMode outputMode)
     else
         activeCreature.programID += 1;
 }
-void doIfSame(const int &i, world_t &world, OutputMode outputMode)
+void doIfSame(const int &i, world_t &world, const OutputMode &outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
     instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
@@ -517,7 +518,7 @@ void doIfSame(const int &i, world_t &world, OutputMode outputMode)
     else
         activeCreature.programID += 1;
 }
-void doIfWall(const int &i, world_t &world, OutputMode outputMode)
+void doIfWall(const int &i, world_t &world, const OutputMode &outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
     instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
@@ -529,7 +530,7 @@ void doIfWall(const int &i, world_t &world, OutputMode outputMode)
     else
         activeCreature.programID += 1;
 }
-void doGo(const int &i, world_t &world, OutputMode outputMode)
+void doGo(const int &i, world_t &world, const OutputMode &outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
     instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
@@ -619,7 +620,7 @@ bool isLegalHop(const creature_t &activeCreature, const grid_t &grid)
         return false;
 }
 
-void checkArgc(int argc)
+void checkArgc(const int &argc)
 {
     if (argc < 4)
     {
@@ -629,7 +630,7 @@ void checkArgc(int argc)
     }
 }
 
-void checkRoundsNum(int roundsNum)
+void checkRoundsNum(const int &roundsNum)
 {
     if (roundsNum < 0)
     {
