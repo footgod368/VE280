@@ -16,8 +16,8 @@ void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, str
 //MODIFIES: 'pathOfSpecies', 'speciesInfo[]', 'speciesNum';
 //EFFECTS: read the file whose path is 'speciesSummary'; record the first line of that file as 'pathOfSpecies';
 //         record each of the rest lines in 'speciesInfo', whose size is 'speciesNum';
-//          if failed to open the file, throw 'speciesInfo' as 'wrongPath';
-//          if 'speciesNum' exceeds MAXSPECIES, throw it as 'excessSpeciesNum';
+//          throw 'speciesSummary' if failed to open the file, ;
+//          throw 'speciesNum' if 'speciesNum' exceeds MAXSPECIES;
 
 void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, string creaturesInfo[], int &creaturesNum);
 //used in 'initWorld'
@@ -25,7 +25,7 @@ void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, str
 //MODIFIES: 'gridWidth', 'gridHeight', 'creaturesInfo', 'creaturesNum'
 //EFFECTS:  read the file whose path is 'worldFile'; record the first line as 'gridWidth', second line as 'gridHeight';
 //          record each of the rest lines in 'creatures', whose size is 'creaturesNum'
-//          if failed to open the file, throw 'worldFile' as 'wrongPath';
+//          throw 'worldFile' if failed to open the file;
 //          if
 
 void initWorld(const string &speciesSummary, const string &worldFile, world_t &world);
@@ -47,6 +47,7 @@ bool isWithAddress(const opcode_t &opcode);
 //EFFECTS:  judge whether the opcode is with an address
 
 void initCreatures(const int &creaturesNum, const string creaturesInfo[], world_t &world);
+//used in 'initWorld'
 //MODIFIES: 'world'
 //EFFECTS:  initialize creatures of 'world' according to 'creaturesNum' and 'creaturesInfo[]'
 
@@ -68,7 +69,7 @@ void viewGrid(const world_t &world);
 //MODIFIES: cout
 //EFFECTS:  view 'world.grid' in console
 
-void oneTakeAction(const int &i, world_t &world, const OutputMode &outputMode);
+void oneCreatureAct(const int &i, world_t &world, const OutputMode &outputMode);
 //MODIFIES: world
 //EFFECTS:  let the i'th creature take action and update 'world' accordingly
 

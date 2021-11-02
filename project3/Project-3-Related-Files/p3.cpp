@@ -8,6 +8,9 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+    /*
+    Handle program arguments
+    */
     try
     {
         checkArgc(argc);
@@ -16,11 +19,9 @@ int main(int argc, char *argv[])
     {
         return 0;
     }
-
     string speciesSummary(argv[1]);
     string worldFile(argv[2]);
     int roundsNum = atoi(argv[3]);
-
     try
     {
         checkRoundsNum(roundsNum);
@@ -29,7 +30,6 @@ int main(int argc, char *argv[])
     {
         return 0;
     }
-
     OutputMode outputMode = Concise;
     if (argc > 4)
     {
@@ -37,7 +37,9 @@ int main(int argc, char *argv[])
         if (verboseSpecifier == "v" || verboseSpecifier == "verbose")
             outputMode = Verbose;
     }
-
+    /*
+    Initialize the world
+    */
     world_t world;
     try
     {
@@ -47,16 +49,17 @@ int main(int argc, char *argv[])
     {
         return 0;
     }
-
     cout << "Initial state" << endl;
     viewGrid(world);
-
+    /*
+    Run rounds
+    */
     for (int roundCount = 1; roundCount <= roundsNum; roundCount++)
     {
         cout << "Round " << roundCount << endl;
         for (unsigned int i = 0; i < world.numCreatures; i++)
         {
-            oneTakeAction(i, world, outputMode);
+            oneCreatureAct(i, world, outputMode);
         }
         if (outputMode == Concise)
             viewGrid(world);

@@ -336,7 +336,7 @@ void viewGrid(const world_t &world)
     }
 }
 
-void oneTakeAction(const int &i, world_t &world, const OutputMode &outputMode)
+void oneCreatureAct(const int &i, world_t &world, const OutputMode &outputMode)
 {
     creature_t &activeCreature = world.creatures[i];
     string speciesName = activeCreature.species->name;
