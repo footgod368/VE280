@@ -99,8 +99,10 @@ void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, str
     fin.close();
 }
 
-void initWorld(const string &speciesSummary, const string &worldFile, world_t &world)
+void initWorld(const DataForInit &dataForInit, world_t &world)
 {
+    string speciesSummary = dataForInit.speciesSummary;
+    string worldFile = dataForInit.worldFile;
 
     int speciesNum = 0;
     string pathOfSpecies;
@@ -111,8 +113,10 @@ void initWorld(const string &speciesSummary, const string &worldFile, world_t &w
     int gridWidth, gridHeight;
     string creaturesInfo[MAXCREATURES];
     readWorldFile(worldFile, gridWidth, gridHeight, creaturesInfo, creaturesNum);
+
     world.grid.width = gridWidth;
     world.grid.height = gridHeight;
+
     initSpecies(speciesNum, speciesInfo, pathOfSpecies, world);
 
     initCreatures(creaturesNum, creaturesInfo, world);
@@ -396,7 +400,7 @@ void doHop(const int &i, world_t &world, const OutputMode &outputMode)
         cout << "Instruction " << (activeCreature.programID + 1) << ": hop" << endl;
     if (isLegalHop(activeCreature, world.grid))
     {
-        activeCreature.location = sqaureFaced(activeCreature.location, activeCreature.direction);
+        activeCreature.location = sqaureFaced(activeCreature);
     }
     activeCreature.programID += 1;
     updateGrid(world);
@@ -470,7 +474,7 @@ void doInfect(const int &i, world_t &world, const OutputMode &outputMode)
         cout << "infect" << endl;
     else
         cout << "Instruction " << (activeCreature.programID + 1) << ": infect" << endl;
-    point_t facedSquare = sqaureFaced(activeCreature.location, activeCreature.direction);
+    point_t facedSquare = sqaureFaced(activeCreature);
     if (isFacingEnemy(activeCreature, world.grid))
     {
         creature_t *ptFacedCreature = getCreatureInSquare(facedSquare.r, facedSquare.c, world);
@@ -488,7 +492,7 @@ void doIfEmpty(const int &i, world_t &world, const OutputMode &outputMode)
     instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
     if (outputMode == Verbose)
         cout << "Instruction " << (activeCreature.programID + 1) << ": ifempty " << instructionNow.address << endl;
-    point_t facedSquare = sqaureFaced(activeCreature.location, activeCreature.direction);
+    point_t facedSquare = sqaureFaced(activeCreature);
     bool isInBoundary = isSquareInBoundary(facedSquare, world.grid);
     bool isEmpty = isSquareEmpty(facedSquare, world.grid);
     if (isInBoundary && isEmpty)
@@ -524,7 +528,7 @@ void doIfWall(const int &i, world_t &world, const OutputMode &outputMode)
     instruction_t instructionNow = activeCreature.species->program[activeCreature.programID];
     if (outputMode == Verbose)
         cout << "Instruction " << (activeCreature.programID + 1) << ": ifwall " << instructionNow.address << endl;
-    point_t facedSquare = sqaureFaced(activeCreature.location, activeCreature.direction);
+    point_t facedSquare = sqaureFaced(activeCreature);
     if (!isSquareInBoundary(facedSquare, world.grid))
         activeCreature.programID = instructionNow.address - 1;
     else
@@ -539,9 +543,12 @@ void doGo(const int &i, world_t &world, const OutputMode &outputMode)
     activeCreature.programID = instructionNow.address - 1;
 }
 
-point_t sqaureFaced(const point_t &loactionNow, const direction_t &facingDir)
+point_t sqaureFaced(const creature_t &activeCreature)
 {
-    point_t facedSquare = loactionNow;
+    point_t locationNow = activeCreature.location;
+    direction_t facingDir = activeCreature.direction;
+
+    point_t facedSquare = locationNow;
     switch (facingDir)
     {
     case EAST:
@@ -581,7 +588,7 @@ bool isSquareEmpty(const point_t &square, const grid_t &grid)
 
 bool isFacingEnemy(const creature_t &activeCreature, const grid_t &grid)
 {
-    point_t facedSquare = sqaureFaced(activeCreature.location, activeCreature.direction);
+    point_t facedSquare = sqaureFaced(activeCreature);
     if (isSquareInBoundary(facedSquare, grid))
     {
         if (!isSquareEmpty(facedSquare, grid))
@@ -597,7 +604,7 @@ bool isFacingEnemy(const creature_t &activeCreature, const grid_t &grid)
 
 bool isFacingSame(const creature_t &activeCreature, const grid_t &grid)
 {
-    point_t facedSquare = sqaureFaced(activeCreature.location, activeCreature.direction);
+    point_t facedSquare = sqaureFaced(activeCreature);
     if (isSquareInBoundary(facedSquare, grid))
     {
         if (!isSquareEmpty(facedSquare, grid))
@@ -613,7 +620,7 @@ bool isFacingSame(const creature_t &activeCreature, const grid_t &grid)
 
 bool isLegalHop(const creature_t &activeCreature, const grid_t &grid)
 {
-    point_t facedSquare = sqaureFaced(activeCreature.location, activeCreature.direction);
+    point_t facedSquare = sqaureFaced(activeCreature);
     if (isSquareInBoundary(facedSquare, grid))
         return isSquareEmpty(facedSquare, grid);
     else
@@ -648,7 +655,8 @@ void checkOverlapped(const world_t &world)
         for (unsigned int j = i + 1; j < world.numCreatures; j++)
         {
             const creature_t &secondCreature = world.creatures[j];
-            if (firstCreature.location.r == secondCreature.location.r && firstCreature.location.c == secondCreature.location.c)
+            if (firstCreature.location.r == secondCreature.location.r &&
+                firstCreature.location.c == secondCreature.location.c)
             {
                 cout << "Error: Creature ("
                      << secondCreature.species->name
@@ -665,4 +673,30 @@ void checkOverlapped(const world_t &world)
             }
         }
     }
+}
+
+void checkProgramArg(int argc, char *argv[])
+{
+    checkArgc(argc);
+    checkRoundsNum(atoi(argv[3]));
+}
+
+void runRounds(world_t &world, const DataForInit &dataForInit)
+{
+    for (int roundCount = 1; roundCount <= dataForInit.roundsNum; roundCount++)
+    {
+        cout << "Round " << roundCount << endl;
+        for (unsigned int i = 0; i < world.numCreatures; i++)
+        {
+            oneCreatureAct(i, world, dataForInit.outputMode);
+        }
+        if (dataForInit.outputMode == Concise)
+            viewGrid(world);
+    }
+}
+
+void viewInitState(const world_t &world)
+{
+    cout << "Initial state" << endl;
+    viewGrid(world);
 }

@@ -10,6 +10,29 @@ enum OutputMode
     Concise
 };
 
+struct DataForInit
+//the data for initialization
+{
+    string speciesSummary;
+    string worldFile;
+    int roundsNum;
+    OutputMode outputMode;
+
+    DataForInit(int argc, char *argv[])
+    {
+        speciesSummary = argv[1];
+        worldFile = argv[2];
+        roundsNum = atoi(argv[3]);
+        outputMode = Concise;
+        if (argc > 4)
+        {
+            string verboseSpecifier(argv[4]);
+            if (verboseSpecifier == "v" || verboseSpecifier == "verbose")
+                outputMode = Verbose;
+        }
+    }
+};
+
 void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, string speciesInfo[], int &speciesNum);
 //used in 'initWorld'
 //REQUIERS: 'speciesNum' is initialized to be 0;
@@ -28,7 +51,7 @@ void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, str
 //          throw 'worldFile' if failed to open the file;
 //          if
 
-void initWorld(const string &speciesSummary, const string &worldFile, world_t &world);
+void initWorld(const DataForInit &dataForInit, world_t &world);
 //MODIFIES: world
 //EFFECTS:  initialize the given 'world' with the information from 'speciesSummary' and 'worldFile'
 
@@ -109,8 +132,8 @@ void doGo(const int &i, world_t &world, const OutputMode &outputMode);
 //MODIFIES: world
 //EFFECTS:  let the i'th creature perform the instruction 'go'
 
-point_t sqaureFaced(const point_t &loactionNow, const direction_t &facingDir);
-//EFFECTS: return the square faced by the creature given its location and facing direction
+point_t sqaureFaced(const creature_t &activeCreature);
+//EFFECTS: return the square faced by the creature
 
 bool isSquareInBoundary(const point_t &square, const grid_t &grid);
 //EFFECTS:  judge whether 'square' is inside the boundary of 'grid'
@@ -136,5 +159,11 @@ void checkRoundsNum(const int &roundsNum);
 
 void checkOverlapped(const world_t &world);
 //EFFECTS:  check whether 'world' has two overlapped creatures
+
+void checkProgramArg(int argc, char *argv[]);
+
+void runRounds(world_t &world, const DataForInit &dataForInit);
+
+void viewInitState(const world_t &world);
 
 #endif
