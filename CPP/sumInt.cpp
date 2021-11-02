@@ -2,13 +2,13 @@
 #include <cstdlib>
 using namespace std;
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
-    int sum=0;
-    for (int i=1; i<argc; i++) // argv[0] is the name of command, i.e. sumInt
+    int sum = 0;
+    for (int i = 1; i < argc; i++) // argv[0] is the name of command, i.e. sumInt
     {
-        sum+=atoi(argv[i]);
+        sum += atoi(argv[i]);
     }
-    cout << sum <<endl;
+    cout << sum << endl;
     return 0;
 }
