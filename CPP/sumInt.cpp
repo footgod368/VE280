@@ -10,5 +10,6 @@ int main(int argc, char * argv[])
         sum+=atoi(argv[i]);
     }
     cout << sum <<endl;
+    cout << argc << endl;
     return 0;
 }
