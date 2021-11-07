@@ -3,15 +3,18 @@
 
 using namespace std;
 
-void fString(string &s){
+void fString(string &s)
+{
     return;
 }
 
-void fStringConst(const string &s){
+void fStringConst(const string &s)
+{
     return;
 }
 
-int main(){
+int main()
+{
     int i = 1;
     // const can be bound to a non-const variable
     const int &iConst = i;
@@ -31,7 +34,7 @@ int main(){
     fString(s);
     fStringConst(s);
 
-    fString(sConst);
+    //fString(sConst);
     fStringConst(sConst);
 
     return 0;

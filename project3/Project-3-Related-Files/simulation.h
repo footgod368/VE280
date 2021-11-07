@@ -39,8 +39,6 @@ void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, str
 //MODIFIES: 'pathOfSpecies', 'speciesInfo[]', 'speciesNum';
 //EFFECTS: read the file whose path is 'speciesSummary'; record the first line of that file as 'pathOfSpecies';
 //         record each of the rest lines in 'speciesInfo', whose size is 'speciesNum';
-//          throw 'speciesSummary' if failed to open the file, ;
-//          throw 'speciesNum' if 'speciesNum' exceeds MAXSPECIES;
 
 void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, string creaturesInfo[], int &creaturesNum);
 //used in 'initWorld'
@@ -48,8 +46,6 @@ void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, str
 //MODIFIES: 'gridWidth', 'gridHeight', 'creaturesInfo', 'creaturesNum'
 //EFFECTS:  read the file whose path is 'worldFile'; record the first line as 'gridWidth', second line as 'gridHeight';
 //          record each of the rest lines in 'creatures', whose size is 'creaturesNum'
-//          throw 'worldFile' if failed to open the file;
-//          if
 
 void initWorld(const DataForInit &dataForInit, world_t &world);
 //MODIFIES: world
@@ -161,9 +157,13 @@ void checkOverlapped(const world_t &world);
 //EFFECTS:  check whether 'world' has two overlapped creatures
 
 void checkProgramArg(int argc, char *argv[]);
+//EFFECTS:  check whether program arguments are valid
 
 void runRounds(world_t &world, const DataForInit &dataForInit);
+//MODIFIES: world
+//EFFECTS:  let the world start runing
 
 void viewInitState(const world_t &world);
+//EFFECTS:  print the initial state
 
 #endif
