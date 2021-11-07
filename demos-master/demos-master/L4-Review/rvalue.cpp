@@ -1,10 +1,14 @@
 #include <iostream>
 
-int main(){
+int main()
+{
    int i = 5;
-   if (i = 4){
+   if (i == 4)
+   {
       std::cout << "equal" << std::endl;
-   } else{
+   }
+   else
+   {
       std::cout << "not equal" << std::endl;
    }
 

@@ -1,9 +1,11 @@
 #include "anInt.h"
 
-int anInt::getValue(){
+int anInt::getValue()
+{
    return v;
 }
 
-void anInt::setValue(int v){
+void anInt::setValue(int v)
+{
    this->v = v;
 }

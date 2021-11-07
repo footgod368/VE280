@@ -3,7 +3,8 @@
 
 using namespace std;
 
-int main(){
+int main()
+{
     IntSet foo;
     cout << "insert 7" << endl;
     foo.insert(7);

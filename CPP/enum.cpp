@@ -34,6 +34,7 @@ public:
 int main()
 {
     Poker_card k(HEARTS);
+    k.suit = 3;
     k.viewSuit();
     cout << k.isRed();
     return 0;

@@ -2,27 +2,39 @@
 #include <fstream>
 using namespace std;
 
-int main(int argc, char *argv[]){
-   if (argc<2){
-      throw "Not enough arguments!";
+int main(int argc, char *argv[])
+{
+   if (argc < 2)
+   {
+      throw "Not enough arguments!"; //no handler for this exception
    }
-   try{
+   try
+   {
       ifstream ifs;
       ifs.open(argv[1]);
-      if (!ifs){
+      if (!ifs)
+      {
          throw string("File cannot be opened!");
       }
-      try{
+      try
+      {
          int n;
          ifs >> n;
-         if (!ifs){
+         if (!ifs)
+         {
             throw 0;
-         } 
-      } catch(long l){
+         }
       }
-   } catch(string s){
+      catch (long l)
+      {
+      }
+   }
+   catch (string s)
+   {
       clog << s << endl;
-   } catch(int n){
+   }
+   catch (int n)
+   {
       clog << n << endl;
    }
 }
