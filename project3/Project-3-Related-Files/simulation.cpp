@@ -139,7 +139,7 @@ void initSpecies(const int &speciesNum, string speciesInfo[], const string &path
 
     for (int i = 0; i < speciesNum; i++)
     {
-        species_t newSpeice;
+        species_t &newSpeice = world.species[i];
         newSpeice.name = speciesInfo[i];
 
         newSpeice.programSize = 0;
@@ -177,7 +177,6 @@ void initSpecies(const int &speciesNum, string speciesInfo[], const string &path
             newSpeice.program[newSpeice.programSize++] = newOpcode;
         }
         fin.close();
-        world.species[i] = newSpeice;
     }
 }
 
@@ -229,7 +228,7 @@ void initCreatures(const int &creaturesNum, const string creaturesInfo[], world_
 
     for (int i = 0; i < creaturesNum; i++)
     {
-        creature_t newCreature;
+        creature_t &newCreature = world.creatures[i];
 
         newCreature.programID = 0;
         string specieName;
@@ -260,8 +259,6 @@ void initCreatures(const int &creaturesNum, const string creaturesInfo[], world_
             throw unknownDirName;
         }
         setSpecie(specieName, newCreature, world);
-
-        world.creatures[i] = newCreature;
     }
 }
 
