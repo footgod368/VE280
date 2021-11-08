@@ -4,14 +4,14 @@
 using namespace std;
 
 enum OutputMode
-//indicate the mode of output
+//Overview: indicate the mode of output
 {
     Verbose,
     Concise
 };
 
 struct DataForInit
-//the data for initialization
+//Overview: the data for initialization
 {
     string speciesSummary;
     string worldFile;

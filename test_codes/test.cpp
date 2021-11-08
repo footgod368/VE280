@@ -1,10 +1,15 @@
 #include <iostream>
-
+#include <fstream>
 using namespace std;
 
 // 基类
 struct Shape
 {
+private:
+    int width;
+    int height;
+
+public:
     void setWidth(int w)
     {
         width = w;
@@ -13,8 +18,6 @@ struct Shape
     {
         height = h;
     }
-    int width;
-    int height;
 };
 
 struct Entity
@@ -35,10 +38,12 @@ class Rectangle : public Shape,
                   public Entity
 {
 public:
+    int test;
     int getArea()
     {
         return (width * height);
     }
+    Rectangle() { test = 100; };
 };
 
 int main(void)
@@ -49,7 +54,6 @@ int main(void)
     Rect.setHeight(7);
     Rect.setName("poly-inheritance");
     Rect.sayName();
-    // 输出对象的面积
     cout << "Total area: " << Rect.getArea() << endl;
 
     return 0;
