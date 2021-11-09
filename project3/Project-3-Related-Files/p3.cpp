@@ -32,6 +32,5 @@ int main(int argc, char *argv[])
     viewInitState(world);
 
     runRounds(world, dataForInit);
-
     return 0;
 }
