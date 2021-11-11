@@ -1,2 +1,2 @@
 Error: Missing arguments!
-Usage: ./p4 <species-summary> <world-file> <rounds> [v|verbose]
+Usage: ./p3 <species-summary> <world-file> <rounds> [v|verbose]

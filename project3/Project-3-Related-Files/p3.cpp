@@ -8,29 +8,21 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+
     try
     {
         checkProgramArg(argc, argv);
-    }
-    catch (...)
-    {
-        return 0;
-    }
-
-    DataForInit dataForInit(argc, argv);
-
-    world_t world;
-    try
-    {
+        DataForInit dataForInit(argc, argv);
+        world_t world;
         initWorld(dataForInit, world);
+        viewInitState(world);
+        runRounds(world, dataForInit);
     }
-    catch (...)
+    catch (Error &error)
     {
+        handleError(error);
         return 0;
     }
 
-    viewInitState(world);
-
-    runRounds(world, dataForInit);
     return 0;
 }
