@@ -699,11 +699,11 @@ void viewInitState(const world_t &world)
 }
 
 DataForInit::DataForInit(int argc, char *argv[])
+    : speciesSummary(argv[1]),
+      worldFile(argv[2]),
+      roundsNum(atoi(argv[3])),
+      outputMode(Concise)
 {
-    speciesSummary = argv[1];
-    worldFile = argv[2];
-    roundsNum = atoi(argv[3]);
-    outputMode = Concise;
     if (argc > 4)
     {
         string verboseSpecifier(argv[4]);
