@@ -10,12 +10,17 @@ using namespace std;
 
 void handleMissingArguments(const Error &error)
 {
+    cout << "Error: Missing arguments!" << endl
+         << "Usage: ./p3 <species-summary> <world-file> <rounds> [v|verbose]" << endl;
 }
 void handleNegativeRoundsNum(const Error &error)
 {
+    cout << "Error: Number of simulation rounds is negative!" << endl;
 }
 void handleIfileFail(const Error &error)
 {
+    string wrongPath = error.failedPath;
+    cout << "Error: Cannot open file " << wrongPath << "!" << endl;
 }
 void handleExcessSpeciesNum(const Error &error)
 {
@@ -83,16 +88,11 @@ void handleError(const Error &error)
 void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, string speciesInfo[], int &speciesNum)
 {
     ifstream fin;
-    try
+    fin.open(speciesSummary);
+    if (!fin)
     {
-        fin.open(speciesSummary);
-        if (!fin)
-            throw speciesSummary;
-    }
-    catch (string wrongPath)
-    {
-        cout << "Error: Cannot open file " << wrongPath << "!" << endl;
-        throw wrongPath;
+        FileError fileError(speciesSummary);
+        throw fileError;
     }
     string line;
     getline(fin, line);
@@ -700,9 +700,8 @@ void checkArgc(const int &argc)
 {
     if (argc < 4)
     {
-        cout << "Error: Missing arguments!" << endl
-             << "Usage: ./p3 <species-summary> <world-file> <rounds> [v|verbose]" << endl;
-        throw argc;
+        Error error(MissingArguments);
+        throw error;
     }
 }
 
@@ -710,8 +709,8 @@ void checkRoundsNum(const int &roundsNum)
 {
     if (roundsNum < 0)
     {
-        cout << "Error: Number of simulation rounds is negative!" << endl;
-        throw roundsNum;
+        Error error(NegativeRoundsNum);
+        throw error;
     }
 }
 

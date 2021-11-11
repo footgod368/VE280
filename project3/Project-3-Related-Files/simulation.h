@@ -41,6 +41,12 @@ enum ErrorType
 struct Error
 {
     ErrorType errorType;
+    Error(ErrorType type) : errorType(type) {}
+};
+struct FileError : public Error
+{
+    string failedPath;
+    FileError(string path) : Error(IfileFail), failedPath(path) {}
 };
 
 void handleError(const Error &error);
