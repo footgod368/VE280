@@ -21,6 +21,28 @@ struct DataForInit
     DataForInit(int argc, char *argv[]);
 };
 
+enum ErrorType
+{
+    MissingArguments,
+    NegativeRoundsNum,
+    IfileFail,
+    ExcessSpeciesNum,
+    ExcessInstructionsNum,
+    UnknownInstruction,
+    ExcessCreaturesNum,
+    UnknownSpecies,
+    UnknownDirection,
+    IllegalGridWidth,
+    IllegalGridHeight,
+    CreatureOutOfBound,
+    CreatureOverlap
+};
+
+struct Error
+{
+    ErrorType errorType;
+};
+
 void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, string speciesInfo[], int &speciesNum);
 //used in 'initWorld'
 //REQUIERS: 'speciesNum' is initialized to be 0;
