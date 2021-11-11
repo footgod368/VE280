@@ -18,19 +18,7 @@ struct DataForInit
     int roundsNum;
     OutputMode outputMode;
 
-    DataForInit(int argc, char *argv[])
-    {
-        speciesSummary = argv[1];
-        worldFile = argv[2];
-        roundsNum = atoi(argv[3]);
-        outputMode = Concise;
-        if (argc > 4)
-        {
-            string verboseSpecifier(argv[4]);
-            if (verboseSpecifier == "v" || verboseSpecifier == "verbose")
-                outputMode = Verbose;
-        }
-    }
+    DataForInit(int argc, char *argv[]);
 };
 
 void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, string speciesInfo[], int &speciesNum);

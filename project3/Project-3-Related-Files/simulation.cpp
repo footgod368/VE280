@@ -697,3 +697,17 @@ void viewInitState(const world_t &world)
     cout << "Initial state" << endl;
     viewGrid(world);
 }
+
+DataForInit::DataForInit(int argc, char *argv[])
+{
+    speciesSummary = argv[1];
+    worldFile = argv[2];
+    roundsNum = atoi(argv[3]);
+    outputMode = Concise;
+    if (argc > 4)
+    {
+        string verboseSpecifier(argv[4]);
+        if (verboseSpecifier == "v" || verboseSpecifier == "verbose")
+            outputMode = Verbose;
+    }
+}
