@@ -165,7 +165,7 @@ void initSpecies(const int &speciesNum, string speciesInfo[], const string &path
             instruction_t newOpcode = getInstruction(line);
             try
             {
-                if (newSpeice.programSize > MAXPROGRAM)
+                if (newSpeice.programSize >= MAXPROGRAM)
                     throw newSpeice.name;
             }
             catch (string specieName)
