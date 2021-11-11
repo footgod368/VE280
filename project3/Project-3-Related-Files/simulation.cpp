@@ -8,6 +8,78 @@
 #include <string>
 using namespace std;
 
+void handleMissingArguments(const Error &error)
+{
+}
+void handleNegativeRoundsNum(const Error &error)
+{
+}
+void handleIfileFail(const Error &error)
+{
+}
+void handleExcessSpeciesNum(const Error &error)
+{
+}
+void handleExcessInstructionsNum(const Error &error)
+{
+}
+void handleUnknownInstruction(const Error &error)
+{
+}
+void handleExcessCreaturesNum(const Error &error)
+{
+}
+void handleUnknownSpecies(const Error &error)
+{
+}
+void handleUnknownDirection(const Error &error)
+{
+}
+void handleIllegalGridWidth(const Error &error)
+{
+}
+void handleIllegalGridHeight(const Error &error)
+{
+}
+void handleCreatureOutOfBound(const Error &error)
+{
+}
+void handleCreatureOverlap(const Error &error)
+{
+}
+void handleError(const Error &error)
+{
+    switch (error.errorType)
+    {
+    case MissingArguments:
+        handleMissingArguments(error);
+        break;
+    case NegativeRoundsNum:
+        handleNegativeRoundsNum(error);
+        break;
+    case IfileFail:
+        handleIfileFail(error);
+        break;
+    case ExcessSpeciesNum:
+        handleExcessSpeciesNum(error);
+        break;
+    case ExcessInstructionsNum:
+        handleExcessInstructionsNum(error);
+        break;
+    case UnknownInstruction:
+        handleUnknownInstruction(error);
+        break;
+    case ExcessCreaturesNum:
+        handleExcessCreaturesNum(error);
+        break;
+    case UnknownSpecies:
+        handleUnknownSpecies(error);
+        break;
+    default:
+        break;
+    }
+}
+
 void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, string speciesInfo[], int &speciesNum)
 {
     ifstream fin;

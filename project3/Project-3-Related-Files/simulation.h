@@ -43,6 +43,8 @@ struct Error
     ErrorType errorType;
 };
 
+void handleError(const Error &error);
+
 void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, string speciesInfo[], int &speciesNum);
 //used in 'initWorld'
 //REQUIERS: 'speciesNum' is initialized to be 0;
