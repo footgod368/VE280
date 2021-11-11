@@ -40,16 +40,14 @@ enum ErrorType
 
 struct Error
 {
-    ErrorType errorType;
-    Error(ErrorType type) : errorType(type) {}
-};
-struct FileError : public Error
-{
-    string failedPath;
-    FileError(string path) : Error(IfileFail), failedPath(path) {}
+    ErrorType type;
+    string info;
+    Error(ErrorType type_, string info_ = "")
+        : type(type_), info(info_) {}
 };
 
 void handleError(const Error &error);
+//EFFECTS: handle all kinds of errors as required
 
 void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, string speciesInfo[], int &speciesNum);
 //used in 'initWorld'

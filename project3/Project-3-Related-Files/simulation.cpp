@@ -19,42 +19,66 @@ void handleNegativeRoundsNum(const Error &error)
 }
 void handleIfileFail(const Error &error)
 {
-    string wrongPath = error.failedPath;
+    string wrongPath = error.info;
     cout << "Error: Cannot open file " << wrongPath << "!" << endl;
 }
 void handleExcessSpeciesNum(const Error &error)
 {
+    cout << "Error: Too many species!" << endl
+         << "Maximal number of species is " << MAXSPECIES << "." << endl;
 }
 void handleExcessInstructionsNum(const Error &error)
 {
+    string specieName = error.info;
+    cout << "Error: Too many instructions for species " << specieName << "!" << endl
+         << "Maximal number of instructions is " << MAXPROGRAM << "." << endl;
 }
 void handleUnknownInstruction(const Error &error)
 {
+    string illegalInstruction = error.info;
+    cout << "Error: Instruction " << illegalInstruction << " is not recognized!" << endl;
 }
 void handleExcessCreaturesNum(const Error &error)
 {
+    cout << "Error: Too many creatures!" << endl
+         << "Maximal number of creatures is " << MAXCREATURES << "." << endl;
 }
 void handleUnknownSpecies(const Error &error)
 {
+    string unknownSpeciesName(error.info);
+    cout << "Error: Species " << unknownSpeciesName << " not found!" << endl;
 }
 void handleUnknownDirection(const Error &error)
 {
+    string unknownDirName(error.info);
+    cout << "Error: Direction " << unknownDirName << " is not recognized!" << endl;
 }
 void handleIllegalGridWidth(const Error &error)
 {
+    cout << "Error: The grid width is illegal!" << endl;
 }
 void handleIllegalGridHeight(const Error &error)
 {
+    cout << "Error: The grid height is illegal!" << endl;
 }
 void handleCreatureOutOfBound(const Error &error)
 {
+    int gridHeight = 0, gridWidth = 0;
+    string creatureInfo;
+    istringstream iss(error.info);
+    iss >> gridHeight >> gridWidth;
+    iss.get();
+    getline(iss, creatureInfo);
+    cout << "Error: Creature (" << creatureInfo << ") is out of bound!" << endl
+         << "The grid size is " << gridHeight << "-by-" << gridWidth << "." << endl;
 }
 void handleCreatureOverlap(const Error &error)
 {
+    cout << error.info << endl;
 }
 void handleError(const Error &error)
 {
-    switch (error.errorType)
+    switch (error.type)
     {
     case MissingArguments:
         handleMissingArguments(error);
@@ -80,6 +104,21 @@ void handleError(const Error &error)
     case UnknownSpecies:
         handleUnknownSpecies(error);
         break;
+    case UnknownDirection:
+        handleUnknownDirection(error);
+        break;
+    case IllegalGridWidth:
+        handleIllegalGridWidth(error);
+        break;
+    case IllegalGridHeight:
+        handleIllegalGridHeight(error);
+        break;
+    case CreatureOutOfBound:
+        handleCreatureOutOfBound(error);
+        break;
+    case CreatureOverlap:
+        handleCreatureOverlap(error);
+        break;
     default:
         break;
     }
@@ -91,25 +130,21 @@ void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, str
     fin.open(speciesSummary);
     if (!fin)
     {
-        FileError fileError(speciesSummary);
-        throw fileError;
+        Error error(IfileFail, speciesSummary);
+        throw error;
     }
     string line;
     getline(fin, line);
     pathOfSpecies = line;
     while (getline(fin, line))
     {
-        try
+
+        if ((unsigned int)speciesNum >= MAXSPECIES)
         {
-            if ((unsigned int)speciesNum >= MAXSPECIES)
-                throw speciesNum;
+            Error error(ExcessSpeciesNum);
+            throw error;
         }
-        catch (int excessSpeciesNum)
-        {
-            cout << "Error: Too many species!" << endl
-                 << "Maximal number of species is " << MAXSPECIES << "." << endl;
-            throw excessSpeciesNum;
-        }
+
         speciesInfo[speciesNum++] = line;
     }
     fin.close();
@@ -118,54 +153,37 @@ void readSpeciesSummary(const string &speciesSummary, string &pathOfSpecies, str
 void readWorldFile(const string &worldFile, int &gridWidth, int &gridHeight, string creaturesInfo[], int &creaturesNum)
 {
     ifstream fin;
-    try
+    fin.open(worldFile);
+    if (!fin)
     {
-        fin.open(worldFile);
-        if (!fin)
-            throw worldFile;
-    }
-    catch (string wrongPath)
-    {
-        cout << "Error: Cannot open file " << wrongPath << "!" << endl;
+        Error error(IfileFail, worldFile);
+        throw error;
     }
     string line;
     getline(fin, line);
     gridHeight = stoi(line);
-    try
+    if (gridHeight < 1 || (unsigned int)gridHeight > MAXHEIGHT)
     {
-        if (gridHeight < 1 || (unsigned int)gridHeight > MAXHEIGHT)
-            throw gridHeight;
-    }
-    catch (int illegalGridHeight)
-    {
-        cout << "Error: The grid height is illegal!" << endl;
-        throw illegalGridHeight;
+        Error error(IllegalGridHeight);
+        throw error;
     }
     getline(fin, line);
     gridWidth = stoi(line);
-    try
+
+    if (gridWidth < 1 || (unsigned int)gridWidth > MAXWIDTH)
     {
-        if (gridWidth < 1 || (unsigned int)gridWidth > MAXWIDTH)
-            throw gridWidth;
-    }
-    catch (int illegalGridWidth)
-    {
-        cout << "Error: The grid width is illegal!" << endl;
-        throw illegalGridWidth;
+        Error error(IllegalGridWidth);
+        throw error;
     }
     while (getline(fin, line))
     {
-        try
+
+        if ((unsigned int)creaturesNum >= MAXCREATURES)
         {
-            if ((unsigned int)creaturesNum >= MAXCREATURES)
-                throw creaturesNum;
+            Error error(ExcessCreaturesNum);
+            throw error;
         }
-        catch (int creaturesNum)
-        {
-            cout << "Error: Too many creatures!" << endl
-                 << "Maximal number of creatures is " << MAXCREATURES << "." << endl;
-            throw creaturesNum;
-        }
+
         creaturesInfo[creaturesNum++] = line;
     }
     fin.close();
@@ -193,14 +211,7 @@ void initWorld(const DataForInit &dataForInit, world_t &world)
 
     initCreatures(creaturesNum, creaturesInfo, world);
 
-    try
-    {
-        checkOverlapped(world);
-    }
-    catch (int index)
-    {
-        throw index;
-    }
+    checkOverlapped(world);
 
     updateGrid(world);
 }
@@ -218,16 +229,12 @@ void initSpecies(const int &speciesNum, string speciesInfo[], const string &path
 
         string pathOfInfo = pathOfSpecies + "/" + newSpeice.name;
         ifstream fin;
-        try
+
+        fin.open(pathOfInfo);
+        if (!fin)
         {
-            fin.open(pathOfInfo);
-            if (!fin)
-                throw pathOfInfo;
-        }
-        catch (string path)
-        {
-            cout << "Error: Cannot open file " << path << "!" << endl;
-            throw path;
+            Error error(IfileFail, pathOfInfo);
+            throw error;
         }
         string line;
         while (getline(fin, line))
@@ -235,16 +242,11 @@ void initSpecies(const int &speciesNum, string speciesInfo[], const string &path
             if (line.empty())
                 break;
             instruction_t newOpcode = getInstruction(line);
-            try
+
+            if (newSpeice.programSize >= MAXPROGRAM)
             {
-                if (newSpeice.programSize >= MAXPROGRAM)
-                    throw newSpeice.name;
-            }
-            catch (string specieName)
-            {
-                cout << "Error: Too many instructions for species " << specieName << "!" << endl
-                     << "Maximal number of instructions is " << MAXPROGRAM << "." << endl;
-                throw specieName;
+                Error error(ExcessInstructionsNum, newSpeice.name);
+                throw error;
             }
             newSpeice.program[newSpeice.programSize++] = newOpcode;
         }
@@ -259,15 +261,9 @@ instruction_t getInstruction(const string &line)
     iss.str(line);
     string nameOfOpcode;
     iss >> nameOfOpcode;
-    try
-    {
-        newInstruction.op = encodeOpName(nameOfOpcode);
-    }
-    catch (string illegalInstruction)
-    {
-        cout << "Error: Instruction " << illegalInstruction << " is not recognized!" << endl;
-        throw illegalInstruction;
-    }
+
+    newInstruction.op = encodeOpName(nameOfOpcode);
+
     newInstruction.address = -1;
     if (isWithAddress(newInstruction.op))
     {
@@ -285,7 +281,8 @@ opcode_t encodeOpName(const string &nameOfOpcode)
         if (opName[i] == nameOfOpcode)
             return (opcode_t)i;
     }
-    throw nameOfOpcode;
+    Error error(UnknownInstruction, nameOfOpcode);
+    throw error;
     return (opcode_t)0;
 }
 
@@ -309,27 +306,16 @@ void initCreatures(const int &creaturesNum, const string creaturesInfo[], world_
         istringstream iss;
         iss.str(line);
         iss >> specieName >> dirName >> newCreature.location.r >> newCreature.location.c;
-        try
+
+        if (!isSquareInBoundary(newCreature.location, world.grid))
         {
-            if (!isSquareInBoundary(newCreature.location, world.grid))
-                throw newCreature;
-        }
-        catch (creature_t newCreature)
-        {
-            cout << "Error: Creature (" << line << ") is out of bound!" << endl
-                 << "The grid size is " << world.grid.height << "-by-" << world.grid.width << "." << endl;
-            throw newCreature.location;
+            string errorInfo(to_string(world.grid.height) + " " + to_string(world.grid.width) + " " + line);
+            Error error(CreatureOutOfBound, errorInfo);
+            throw error;
         }
 
-        try
-        {
-            newCreature.direction = encodeDirName(dirName);
-        }
-        catch (string unknownDirName)
-        {
-            cout << "Error: Direction " << unknownDirName << " is not recognized!" << endl;
-            throw unknownDirName;
-        }
+        newCreature.direction = encodeDirName(dirName);
+
         setSpecie(specieName, newCreature, world);
     }
 }
@@ -341,7 +327,8 @@ direction_t encodeDirName(const string &dirName)
         if (directName[i] == dirName)
             return (direction_t)i;
     }
-    throw dirName;
+    Error error(UnknownDirection, dirName);
+    throw error;
     return (direction_t)0;
 }
 
@@ -356,15 +343,11 @@ void setSpecie(const string &specieName, creature_t &newCreature, world_t &world
             isInSpeciesList = true;
         }
     }
-    try
+
+    if (!isInSpeciesList)
     {
-        if (!isInSpeciesList)
-            throw specieName;
-    }
-    catch (string UnknownSpeciesName)
-    {
-        cout << "Error: Species " << UnknownSpeciesName << " not found!" << endl;
-        throw UnknownSpeciesName;
+        Error error(UnknownSpecies, specieName);
+        throw error;
     }
 }
 
@@ -714,6 +697,13 @@ void checkRoundsNum(const int &roundsNum)
     }
 }
 
+string renderOverlappedInfo(const creature_t &firstCreature, const creature_t &secondCreature)
+{
+    string firstInfo(firstCreature.species->name + " " + directName[firstCreature.direction] + " " + to_string(firstCreature.location.r) + " " + to_string(firstCreature.location.c));
+    string secondInfo(secondCreature.species->name + " " + directName[secondCreature.direction] + " " + to_string(secondCreature.location.r) + " " + to_string(secondCreature.location.c));
+    return "Error: Creature (" + secondInfo + ") overlaps with creature (" + firstInfo + ")!";
+}
+
 void checkOverlapped(const world_t &world)
 {
 
@@ -726,18 +716,9 @@ void checkOverlapped(const world_t &world)
             if (firstCreature.location.r == secondCreature.location.r &&
                 firstCreature.location.c == secondCreature.location.c)
             {
-                cout << "Error: Creature ("
-                     << secondCreature.species->name
-                     << " " << directName[secondCreature.direction]
-                     << " " << secondCreature.location.r
-                     << " " << secondCreature.location.c
-                     << ") overlaps with creature ("
-                     << firstCreature.species->name << " "
-                     << directName[firstCreature.direction]
-                     << " " << firstCreature.location.r << " "
-                     << firstCreature.location.c << ")!" << endl;
-
-                throw j;
+                string errorInfo = renderOverlappedInfo(firstCreature, secondCreature);
+                Error error(CreatureOverlap, errorInfo);
+                throw error;
             }
         }
     }

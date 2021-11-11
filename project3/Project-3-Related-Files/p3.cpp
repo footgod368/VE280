@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
         viewInitState(world);
         runRounds(world, dataForInit);
     }
-    catch (Error error)
+    catch (Error &error)
     {
         handleError(error);
         return 0;

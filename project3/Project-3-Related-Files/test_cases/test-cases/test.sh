@@ -34,7 +34,8 @@
 ./p3 species_test/species world_test/same/same_wall 10 v > output/33.out
 ./p3 species_test/species world_test/wall/wall_turner 10 v > output/34.out
 
-for ((i=1;i<=34;i++))
+for ((i=0;i<=34;i++))
 do
+    echo "in command $i:"
     diff output/$i.out stdOutput/$i.out
 done
