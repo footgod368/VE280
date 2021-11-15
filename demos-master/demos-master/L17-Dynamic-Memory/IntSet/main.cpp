@@ -4,6 +4,7 @@
 using namespace std;
 
 int main() {
+    
     IntSet* ip = new IntSet(50);
     cout << "insert 7" << endl;
     ip->insert(7);
