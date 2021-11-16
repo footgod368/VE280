@@ -45,10 +45,14 @@ public:
     void dicardAllCards();
 };
 
-Player *initPlayer(char mode[]);
-
 int main(int argc, char *argv[])
 {
+    if (argc < 4)
+    {
+        cout << "exit" << endl;
+        return 0;
+    }
+
     Driver driver(argc, argv);
 
     driver.shuffle();
@@ -88,14 +92,6 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-Driver::Driver(int argc, char *argv[])
-    : bankroll(atoi(argv[1])),
-      minimum(5),
-      handsNum(atoi(argv[2])),
-      handsCount(0),
-      wager(0),
-      player(initPlayer(argv[3])) {}
-
 Player *initPlayer(char mode[])
 {
     string mode_(mode);
@@ -103,6 +99,14 @@ Player *initPlayer(char mode[])
         return get_Counting();
     return get_Simple();
 }
+
+Driver::Driver(int argc, char *argv[])
+    : bankroll(atoi(argv[1])),
+      minimum(5),
+      handsNum(atoi(argv[2])),
+      handsCount(0),
+      wager(0),
+      player(initPlayer(argv[3])) {}
 
 void Driver::shuffle()
 {
