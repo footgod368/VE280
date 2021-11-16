@@ -3,19 +3,22 @@
 
 #include "card.h"
 
-struct HandValue {
-    int  count;    // Value of hand
-    bool soft;     // true if hand value is a soft count
+struct HandValue
+{
+    int count; // Value of hand
+    bool soft; // true if hand value is a soft count
 };
 
-class Hand {
+class Hand
+{
     // OVERVIEW: A blackjack hand of zero or more cards
     // Note: this really is the only private state you need!
     HandValue curValue;
- public:
-    Hand(); 
+
+public:
+    Hand();
     // EFFECTS: establishes an empty blackjack hand.
-    
+
     void discardAll();
     // MODIFIES: this
     // EFFECTS: discards any cards presently held, restoring the state

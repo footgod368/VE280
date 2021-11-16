@@ -61,7 +61,7 @@ void resetDeck(Card deck[])
     }
 }
 
-void shuffle_helper(const Card leftDeck[], const int leftLen, const Card rightDeck[], const int rightLen, Card *newDeck)
+void shuffle_helper(const Card leftDeck[], const int leftLen, const Card rightDeck[], const int rightLen, Card newDeck[])
 {
     if (leftLen > 0 && rightLen > 0)
     {
