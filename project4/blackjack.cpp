@@ -47,12 +47,6 @@ public:
 
 int main(int argc, char *argv[])
 {
-    if (argc < 4)
-    {
-        cout << "exit" << endl;
-        return 0;
-    }
-
     Driver driver(argc, argv);
 
     driver.shuffle();

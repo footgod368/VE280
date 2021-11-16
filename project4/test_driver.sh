@@ -1,8 +1,6 @@
 #!/bin/bash
 
-rm -f result.txt
-
-g++ -o blackjack blackjack.cpp card.cpp deck.cpp hand.cpp player.cpp rand.cpp
+g++ -o blackjack blackjack.cpp card.cpp deck.cpp hand.cpp player.cpp rand.cpp -Wall
 ./blackjack 100 3 simple >test.out
 diff test.out sample.txt >result.txt
 rm -f blackjack test.out
@@ -12,4 +10,4 @@ cd test-cases
 make
 bash runTest.sh
 make clean
-rm *.o
+rm -f *.o
