@@ -40,7 +40,7 @@ public:
     bool isDealerBust();
     void dealerBust();
     void announceDealerTotal();
-    void announceOutcome();
+    void announceHandResult();
     void announceGameResult();
     void dicardAllCards();
 };
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
             driver.dealerBust();
             continue;
         }
-        driver.announceOutcome();
+        driver.announceHandResult();
     }
     driver.announceGameResult();
     return 0;
@@ -236,7 +236,7 @@ void Driver::announceDealerTotal()
     cout << "Dealer's total is " << dealer_count << endl;
 }
 
-void Driver::announceOutcome()
+void Driver::announceHandResult()
 {
     int player_count = handOfPlayer.handValue().count;
     int dealer_count = handOfDealer.handValue().count;

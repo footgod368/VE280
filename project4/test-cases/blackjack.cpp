@@ -6,6 +6,7 @@
 using namespace std;
 
 class Driver
+//OVERVIEW: a driver of the whole game
 {
 private:
     unsigned int bankroll;
@@ -22,27 +23,27 @@ private:
 
 public:
     Driver(int argc, char *argv[]);
-    void shuffle();
-    bool shouldContinue();
-    void announceHand();
-    bool shouldShuffle();
-    void setWager();
-    void firstDeal();
-    bool isNatural();
-    void winNaturally();
-    void playerPlay();
-    bool isPlayerBust();
-    void playerBust();
-    void announcePlayerTotal();
-    void exposeHoleCard();
-    void dealerPlay();
-    bool shouldDealerDraw();
-    bool isDealerBust();
-    void dealerBust();
-    void announceDealerTotal();
-    void announceOutcome();
-    void announceGameResult();
-    void dicardAllCards();
+    void shuffle();             //EFFECTS: shuffle the deck
+    bool shouldContinue();      //EFFECTS: return true if the game should continue, false if not
+    void announceHand();        //EFFECTS: announce a hand
+    bool shouldShuffle();       //EFFECTS: return true if the deck should be shuffled, false if not
+    void setWager();            //EFFECTS: let the player set a wager
+    void firstDeal();           //EFFECTS: make the first deal of four cards
+    bool isNatural();           //EFFECTS: return true if player win naturally, false if not
+    void winNaturally();        //EFFECTS: let player win naturally
+    void playerPlay();          //EFFECTS: let player play his hand
+    bool isPlayerBust();        //EFFECTS: return true if player busts, false if not
+    void playerBust();          //EFFECTS: let player bust
+    void announcePlayerTotal(); //EFFECTS: announce the total of player
+    void exposeHoleCard();      //EFFECTS: expose the hole card
+    void dealerPlay();          //EFFECTS: let dealer play his hand
+    bool shouldDealerDraw();    //EFFECTS: return true if dealer should draw, false if not
+    bool isDealerBust();        //EFFECTS: return true if dealer busts, false if not
+    void dealerBust();          //EFFECTS: let dealer bust
+    void announceDealerTotal(); //EFFECTS: announce the total of dealer
+    void announceHandResult();  //EFFECTS: announce the result of the hand
+    void announceGameResult();  //EFFECTS: announce the result of the game
+    void dicardAllCards();      //EFFECTS: let dealer and player discard all cards
 };
 
 int main(int argc, char *argv[])
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
             driver.dealerBust();
             continue;
         }
-        driver.announceOutcome();
+        driver.announceHandResult();
     }
     driver.announceGameResult();
     return 0;
@@ -236,7 +237,7 @@ void Driver::announceDealerTotal()
     cout << "Dealer's total is " << dealer_count << endl;
 }
 
-void Driver::announceOutcome()
+void Driver::announceHandResult()
 {
     int player_count = handOfPlayer.handValue().count;
     int dealer_count = handOfDealer.handValue().count;
