@@ -1,13 +1,16 @@
 #include <iostream>
 #include "List.h"
+#include <cmath>
 using namespace std;
 
-void foo(List<int> x){
+void foo(List<int> x)
+{
     cout << "Print copy in function foo" << endl;
     x.print();
 }
 
-int main(){
+int main()
+{
     List<int> s;
     cout << "Insert 1 at the front" << endl;
     s.insert(1);

@@ -38,8 +38,8 @@ public:
      * Tank_B (1) -> P2
      * @param move The move it wants to take
      * M_Straight (0) -> Go straightly
-     * M_Left (1) -> Turn Left
-     * M_Right (2) -> Turn Right
+     * M_Left (1) -> TurnStatus Left
+     * M_Right (2) -> TurnStatus Right
      */
     void move(Tank tank, Move move) override {
         // Record A Move And Update Your Game
@@ -48,15 +48,15 @@ public:
     }
 
     /**
-     * Calculate the result at the end of the turn. It will be called after two tanks makes their move.
+     * Calculate the result at the end of the TurnStatus. It will be called after two tanks makes their move.
      * @return
      * T_Cont (0) -> Game continues
      * T_A_Win (1) -> P1 Wins
      * T_B_Win (2) -> P2 Wins
      * T_Draw (3) -> Draw
      */
-    Turn turn() override {
-        // Make Your Turn Here
+    TurnStatus TurnStatus() override {
+        // Make Your TurnStatus Here
         // 0. Tank Crash
         // 1. Move Bullets
         // 2. Out of Boundary
@@ -74,7 +74,7 @@ public:
 
     /**
      * Get the battlefield.
-     * Map.block: Each block of the map. The first index is `y` and the second index is `x`
+     * Map.blocks: Each blocks of the map. The first index is `y` and the second index is `x`
      * @return
      */
     Map getMap() const override {

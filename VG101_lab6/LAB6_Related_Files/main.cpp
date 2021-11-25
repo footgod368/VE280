@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 
             game.move(Tank_A, m);
             game.move(Tank_B, Move(oppMove));
-        } while (game.turn() == T_Cont);
+        } while (game.TurnStatus() == T_Cont);
     }
     else
     {
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
         cin >> myD >> oppD;
         game.initialize(myX, myY, oppX, oppY, Direction(myD), Direction(oppD));
 
-        Turn turn_status;
+        TurnStatus turn_status;
 
         do
         {
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 
             game.move(Tank_A, Move(myMove));
             game.move(Tank_B, Move(oppMove));
-        } while ((turn_status = game.turn()) == T_Cont);
+        } while ((turn_status = game.TurnStatus()) == T_Cont);
 
         switch (turn_status)
         {
