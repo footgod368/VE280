@@ -9,7 +9,9 @@
         "string_view": "cpp",
         "cassert": "cpp",
         "cmath": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "vector": "cpp",
+        "map": "cpp"
     },
     "cmake.configureOnOpen": true
 }

@@ -1,8 +1,9 @@
+#include <iostream>
+#include <cmath>
+
 #ifndef VECTOR2D_H
 #define VECTOR2D_H
 
-#include <iostream>
-#include <cmath>
 using namespace std;
 
 template <class T>
@@ -34,6 +35,8 @@ public:
 
     ~Vector2D() {}
 };
+
+typedef Vector2D<int> Point;
 
 template <class T>
 void Vector2D<T>::copyFrom(const Vector2D<T> &source)

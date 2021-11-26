@@ -26,5 +26,8 @@ int main()
 
     v0 = v0;
     v0.print();
+
+    v0 = {1.0, 3.0};
+    v0.print();
     return 0;
 }
