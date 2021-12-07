@@ -11,9 +11,15 @@ void Dlist<T>::insertFront(T *op)
     newNode->next = first;
     newNode->prev = NULL;
     newNode->op = op;
-    first = newNode;
-    if (!last)
-        last = newNode;
+    if (isEmpty())
+    {
+        first = last = newNode;
+    }
+    else
+    {
+        first->prev = newNode;
+        first = newNode;
+    }
 }
 
 template <class T>
@@ -23,9 +29,15 @@ void Dlist<T>::insertBack(T *op)
     newNode->next = NULL;
     newNode->prev = last;
     newNode->op = op;
-    last = newNode;
-    if (!first)
-        first = newNode;
+    if (isEmpty())
+    {
+        first = last = newNode;
+    }
+    else
+    {
+        last->next = newNode;
+        last = newNode;
+    }
 }
 
 template <class T>

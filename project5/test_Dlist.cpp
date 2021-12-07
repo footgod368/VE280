@@ -20,8 +20,13 @@ int main()
     assert(*o3 == 3);
     delete o3;
 
-    Dlist<int> l2;
+    Dlist<int> l2(l1);
+    int *n4 = new int(4);
+    l2.insertFront(n4);
+    int *n5 = new int(5);
+    l2.insertBack(n5);
     l2 = l1;
+    l2 = l2;
     int *o1 = l2.removeBack();
     assert(*o1 == 1);
     delete o1;

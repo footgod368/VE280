@@ -11,8 +11,7 @@ class Dlist
 {
     // OVERVIEW: contains a double-ended list of Objects
 
- public:
-
+public:
     // Operational methods
 
     bool isEmpty() const;
@@ -21,7 +20,7 @@ class Dlist
     void insertFront(T *op);
     // MODIFIES this
     // EFFECTS inserts o at the front of the list
-    
+
     void insertBack(T *op);
     // MODIFIES this
     // EFFECTS inserts o at the back of the list
@@ -37,22 +36,22 @@ class Dlist
     //         throws an instance of emptyList if empty
 
     // Maintenance methods
-    Dlist();                                   // constructor
-    Dlist(const Dlist &l);                     // copy constructor
-    Dlist &operator=(const Dlist &l);          // assignment operator
-    ~Dlist();                                  // destructor
+    Dlist();                          // constructor
+    Dlist(const Dlist &l);            // copy constructor
+    Dlist &operator=(const Dlist &l); // assignment operator
+    ~Dlist();                         // destructor
 
- private:
+private:
     // A private type
     struct node
     {
-        node   *next;
-        node   *prev;
-        T      *op;
+        node *next;
+        node *prev;
+        T *op;
     };
 
-    node   *first; // The pointer to the first node (NULL if none)
-    node   *last;  // The pointer to the last node (NULL if none)
+    node *first; // The pointer to the first node (NULL if none)
+    node *last;  // The pointer to the last node (NULL if none)
 
     // Utility methods
 
