@@ -13,7 +13,8 @@ void Dlist<T>::insertFront(T *op)
     newNode->op = op;
     if (isEmpty())
     {
-        first = last = newNode;
+        first = newNode;
+        last = newNode;
     }
     else
     {
@@ -31,7 +32,8 @@ void Dlist<T>::insertBack(T *op)
     newNode->op = op;
     if (isEmpty())
     {
-        first = last = newNode;
+        first = newNode;
+        last = newNode;
     }
     else
     {
@@ -57,8 +59,10 @@ T *Dlist<T>::removeFront()
     T *result;
     if (first == last)
     {
-        result = first->op;
+        node *victim = first;
+        result = victim->op;
         first = last = NULL;
+        delete victim;
     }
     else
     {
@@ -82,8 +86,10 @@ T *Dlist<T>::removeBack()
     T *result;
     if (first == last)
     {
-        result = last->op;
+        node *victim = last;
+        result = victim->op;
         first = last = NULL;
+        delete victim;
     }
     else
     {

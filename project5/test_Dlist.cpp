@@ -19,7 +19,6 @@ int main()
     int *o3 = l1.removeBack();
     assert(*o3 == 3);
     delete o3;
-
     Dlist<int> l2(l1);
     int *n4 = new int(4);
     l2.insertFront(n4);

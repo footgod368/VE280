@@ -190,7 +190,7 @@ Controller::Controller()
       goldQueue(new CallQueue),
       silverQueue(new CallQueue),
       regularQueue(new CallQueue),
-      fourQueues({platinumQueue, goldQueue, silverQueue, regularQueue}),
+      fourQueues{platinumQueue, goldQueue, silverQueue, regularQueue},
       allCallsQueue(new CallQueue),
       agent(new Agent) {}
 
