@@ -230,9 +230,9 @@ string getOneWord(string &str)
 
 void Controller::readFile()
 {
-    cin >> callsNum;
     string line;
     getline(cin, line);
+    callsNum = stoi(line);
     while (getline(cin, line))
     {
         line = line + " ";
