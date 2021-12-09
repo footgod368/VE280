@@ -97,7 +97,7 @@ int main()
     {
         controller->runNewTick();
     }
-
+    delete controller;
     return 0;
 }
 
