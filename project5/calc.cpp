@@ -72,7 +72,7 @@ int main()
             }
         }
     }
-    catch (InputType errorType)
+    catch (InputType exit)
     {
     }
     return 0;

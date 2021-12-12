@@ -12,7 +12,8 @@ enum Status
     REGULAR
 };
 const string statusToStr[4] = {"platinum", "gold", "silver", "regular"};
-Status strToStatus(string str)
+Status strToStatus(const string &str)
+//EFFECTS: return the corresponding Status w.r.t. a string among "platinum", "gold", "silver", "regular"
 {
     for (int i = 0; i <= 3; i++)
     {
@@ -24,6 +25,7 @@ Status strToStatus(string str)
 }
 
 struct Call
+//OVERVIEW: contains all information of a single call
 {
     int tick;
     string name;
@@ -32,6 +34,7 @@ struct Call
 };
 
 class CallQueue
+//OVERVIEW: a queue of calls
 {
 private:
     Dlist<Call> *queue;
@@ -48,56 +51,66 @@ public:
 };
 
 class Agent
+//OVERVIEW: the agent
 {
 private:
-    int busyDuration;
-    Call *currentServingCall;
-    int finishedNum;
+    int busyDuration;         //represents how many ticks are left for the agent to finish current call
+    Call *currentServingCall; //represents the call which is currently served by the agent
+    int finishedNum;          //represents how many calls have been finished by the agent
 
 public:
     Agent();
     ~Agent();
-    void actOnTick(int currentTick, CallQueue *fourQueues[4]);
+    void actOnTick(const int currentTick, CallQueue *fourQueues[4]);
+    //MODIFIES: *this, *fourQueues[]
+    //EFFECTS: let the agent act on a certain tick, depending on whether or not the agent is busy
+    //if not busy, the agent looks for the call with highest priority in 'fourQueues' that happens not later than 'currentTick' to serve
     bool isBusy();
+    //EFFECTS: return true if the agent is busy, false if not
     int getFinishedNum();
+    //EFFECTS: returns the 'finishedNum' of the agent
 };
 
 class Controller
 {
 private:
-    int currentTick;
-    int callsNum;
+    int currentTick; //represents the current tick
+    int callsNum;    // represents the total number of calls
 
-    CallQueue *platinumQueue;
-    CallQueue *goldQueue;
-    CallQueue *silverQueue;
-    CallQueue *regularQueue;
-    CallQueue *fourQueues[4];
+    CallQueue *platinumQueue; //represents the queue of platinum calls
+    CallQueue *goldQueue;     //represents the queue of gold calls
+    CallQueue *silverQueue;   //represents the queue of silver calls
+    CallQueue *regularQueue;  //represents the queue of regular calls
+    CallQueue *fourQueues[4]; //the array of the four queues above
 
-    CallQueue *allCallsQueue;
+    CallQueue *allCallsQueue; //represents the queue of all calls, in the order of the input file
 
-    Agent *agent;
+    Agent *agent; //represents the agent
 
     void announceCalls();
-    void placeCalls();
+    //EFFECTs: announce all calls happening on current tick
 
 public:
     Controller();
     ~Controller();
     void readFile();
+    //MODIFIES: *this
+    //EFFECTS: read the input file and store the information of calls
     void runNewTick();
+    //MODIFIES: *this
+    //EFFECTS: launch a new tick and run on it
     bool shouldStop();
+    //EFFECTS: return whether the simulation should stop
 };
 
 int main()
 {
-    Controller *controller = new Controller;
-    controller->readFile();
-    while (!controller->shouldStop())
+    Controller controller;
+    controller.readFile();
+    do
     {
-        controller->runNewTick();
-    }
-    delete controller;
+        controller.runNewTick();
+    } while (!controller.shouldStop());
     return 0;
 }
 
@@ -141,7 +154,7 @@ Agent::~Agent()
     delete currentServingCall;
 }
 
-void Agent::actOnTick(int currentTick, CallQueue *fourQueues[4])
+void Agent::actOnTick(const int currentTick, CallQueue *fourQueues[4])
 {
 
     busyDuration--;

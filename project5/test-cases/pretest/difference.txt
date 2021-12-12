@@ -1,24 +1,4 @@
-In command 0:
-In command 1:
-In command 2:
-In command 3:
-In command 4:
-In command 0:
-In command 1:
-In command 2:
-In command 3:
-In command 0:
-In command 1:
-In command 2:
-In command 3:
-In command 0:
-In command 1:
-In command 2:
-In command 3:
-In command 0:
-In command 1:
-In command 2:
-In command 3:
+difference:
 In command 0:
 In command 1:
 In command 2:
