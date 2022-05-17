@@ -1,1 +1,1 @@
-# codes of VE280, Bole Li
+# codes of the course VE280, Programing and Elementary Data Structures
